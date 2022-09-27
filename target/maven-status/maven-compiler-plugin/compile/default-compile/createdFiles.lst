@@ -8,13 +8,11 @@ org/openapitools/configuration/HomeController.class
 at/fhtw/swen3/persistence/WarehouseNextHops.class
 at/fhtw/swen3/services/WarehouseApi.class
 at/fhtw/swen3/persistence/Warehouse.class
-at/fhtw/swen3/services/WarehouseApiController.class
 org/openapitools/RFC3339DateFormat.class
 org/openapitools/configuration/SpringDocConfiguration.class
 org/openapitools/OpenApiGeneratorApplication.class
 at/fhtw/swen3/persistence/Recipient.class
 at/fhtw/swen3/persistence/Error.class
-at/fhtw/swen3/services/ParcelApiController.class
 at/fhtw/swen3/persistence/NewParcelInfo.class
 at/fhtw/swen3/persistence/TrackingInformation$StateEnum.class
 at/fhtw/swen3/persistence/Truck.class
