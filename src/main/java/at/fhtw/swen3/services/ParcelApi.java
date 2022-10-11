@@ -202,7 +202,7 @@ public interface ParcelApi {
 
 
     /**
-     * POST /parcel/{trackingId} : Transfer an existing parcel into the system from the service of a logistics partner. 
+     * POST /parcel/{trackingId} : Transfer an existing parcel into the system dtosToEntity the service of a logistics partner.
      *
      * @param trackingId The tracking ID of the parcel. E.g. PYJRB4HZ6  (required)
      * @param parcel  (required)
@@ -212,7 +212,7 @@ public interface ParcelApi {
      */
     @Operation(
         operationId = "transitionParcel",
-        summary = "Transfer an existing parcel into the system from the service of a logistics partner. ",
+        summary = "Transfer an existing parcel into the system dtosToEntity the service of a logistics partner. ",
         tags = { "logisticsPartner" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Successfully transitioned the parcel", content = {
