@@ -18,7 +18,6 @@ public class GeoCoordinateMapper {
         assertEquals(geoCoordinateEntity.getLat(), geoCoordinate.getLat());
         assertEquals(geoCoordinateEntity.getLon(), geoCoordinate.getLon());
 
-
     }
 
     @Test
