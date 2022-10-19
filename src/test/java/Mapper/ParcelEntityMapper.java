@@ -1,6 +1,6 @@
 package Mapper;
 
-import at.fhtw.swen3.persistence.entity.Parcel;
+import at.fhtw.swen3.persistence.entity.ParcelEntity;
 import at.fhtw.swen3.services.dto.*;
 import org.junit.jupiter.api.Test;
 
@@ -9,35 +9,113 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class ParcelEntityMapper {
-
-
     @Test
     void dtoToEntity(){
-        HopArrivalDto hopDto = new HopArrivalDto("Code123","first hop",OffsetDateTime.now());
-        HopArrivalDto hopDto2 = new HopArrivalDto("Code33","second hop",OffsetDateTime.now());
+        HopArrival hopDto = new HopArrival();
+        hopDto.setDateTime(OffsetDateTime.now());
+        hopDto.setCode("Code123");
+        hopDto.setDescription("first hop");
 
-        List <HopArrivalDto> visitedHopsDto= new ArrayList<>();
+        HopArrival hopDto2 = new HopArrival();
+        hopDto2.setDateTime(OffsetDateTime.now());
+        hopDto2.setCode("Code123");
+        hopDto2.setDescription("first hop");
+
+        List <HopArrival> visitedHopsDto= new ArrayList<>();
         visitedHopsDto.add(hopDto);
         visitedHopsDto.add(hopDto2);
 
         String trakingIdDto="id22312";
 
-        NewParcelInfoDto newParcelInfodto = new NewParcelInfoDto(trakingIdDto);
-        TrackingInformationDto trackingInformation = new TrackingInformationDto(TrackingInformationDto.StateEnum.PICKUP ,visitedHopsDto,visitedHopsDto);
+        NewParcelInfo newParcelInfodto = new NewParcelInfo();
+        newParcelInfodto.setTrackingId(trakingIdDto);
+
+        TrackingInformation trackingInformationdto = new TrackingInformation();
+        trackingInformationdto.setVisitedHops(visitedHopsDto);
+        trackingInformationdto.setState(TrackingInformation.StateEnum.PICKUP);
+        trackingInformationdto.setFutureHops(visitedHopsDto);
 
         Float weight = Float.valueOf(50);
-        RecipientDto recipient= new RecipientDto("Amal","Donaufelder Street","1210","Vienna","Austria");
 
-        RecipientDto sender = new RecipientDto("Firas","Heliopolis Street","333","Cairo","Egypt");
+        Recipient recipientDto = new Recipient();
+        recipientDto.setStreet("Donaufelder Street");
+        recipientDto.setCity("Vienna");
+        recipientDto.setPostalCode("1210");
+        recipientDto.setName("Amal");
+        recipientDto.setCountry("Austria");
 
-        ParcelDto parcelDto = new ParcelDto(weight,recipient,sender);
+        Recipient senderDto = new Recipient();
+        senderDto.setStreet("Heliopolis Street");
+        senderDto.setCity("Cairo");
+        senderDto.setPostalCode("3333");
+        senderDto.setName("Firas");
+        senderDto.setCountry("Egypt");
 
-        Parcel parcel = at.fhtw.swen3.services.mapper.ParcelEntityMapper.INSTANCE.dtosToEntity( parcelDto,trackingInformation,newParcelInfodto);
+        Parcel parcelDto = new Parcel();
+
+        parcelDto.recipient(recipientDto);
+        parcelDto.sender(senderDto);
+        parcelDto.weight(weight);
+
+        ParcelEntity parcel = at.fhtw.swen3.services.mapper.ParcelEntityMapper.INSTANCE.dtosToEntity( parcelDto,trackingInformationdto,newParcelInfodto);
 
         assertEquals(parcel.getWeight(),weight);
 
     }
-}
 
+    @Test
+    void TrackingInformationtoParcelEntity() {
+        HopArrival hopDto = new HopArrival();
+        hopDto.setDateTime(OffsetDateTime.now());
+        hopDto.setCode("Code123");
+        hopDto.setDescription("first hop");
+
+        HopArrival hopDto2 = new HopArrival();
+        hopDto2.setDateTime(OffsetDateTime.now());
+        hopDto2.setCode("Code123");
+        hopDto2.setDescription("first hop");
+
+        List<HopArrival> visitedHopsDto = new ArrayList<>();
+        visitedHopsDto.add(hopDto);
+        visitedHopsDto.add(hopDto2);
+
+
+        TrackingInformation trackingInformationdto = new TrackingInformation();
+        trackingInformationdto.setVisitedHops(visitedHopsDto);
+        trackingInformationdto.setState(TrackingInformation.StateEnum.PICKUP);
+        trackingInformationdto.setFutureHops(visitedHopsDto);
+
+
+        ParcelEntity parcel = at.fhtw.swen3.services.mapper.ParcelEntityMapper.INSTANCE.TrackingInformationToParcelEntity(trackingInformationdto);
+
+        assertEquals(parcel.getVisitedHops().get(0).getCode(), visitedHopsDto.get(0).getCode());
+        assertEquals(parcel.getFutureHops().get(1).getDescription(), visitedHopsDto.get(1).getDescription());
+        assertEquals(parcel.getState().getValue(), TrackingInformation.StateEnum.PICKUP.getValue());
+
+        assertNull(parcel.getWeight());
+        assertNull(parcel.getTrackingId());
+        assertNull(parcel.getRecipient());
+        assertNull(parcel.getSender());
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
