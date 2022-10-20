@@ -6,8 +6,8 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-20T00:21:23+0200",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
+    date = "2022-10-20T17:27:19+0200",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 public class GeoCoordinateMapperImpl implements GeoCoordinateMapper {
 
