@@ -8,7 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class WarehouseNextHopsEnitity {
+public class WarehouseNextHopsEntity {
+
     private Integer traveltimeMins;
 
     private Hop hop;

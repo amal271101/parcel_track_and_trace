@@ -5,18 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 public class ParcelEntity {
-   @Size(min = 0, message = "weight must be greater then or equal to 0")
-    private Float weight;
 
+    @Min(0)@Max(10) @NotNull(message = "weight must be between 1 and 10")
+    private Float weight;
 
    @Pattern(regexp = "^[A-Z0-9]{9}$")
    private String trackingId;

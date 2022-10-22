@@ -17,8 +17,8 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-20T17:27:20+0200",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
+    date = "2022-10-22T20:36:07+0200",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
 )
 public class ParcelEntityMapperImpl implements ParcelEntityMapper {
 
@@ -115,6 +115,34 @@ public class ParcelEntityMapperImpl implements ParcelEntityMapper {
         Float weight = null;
         RecipientEntity sender = null;
         RecipientEntity recipient = null;
+        StateEnumEntity state = null;
+        List<HopArrivalEntity> futureHops = null;
+        List<HopArrivalEntity> visitedHops = null;
+
+        ParcelEntity parcelEntity = new ParcelEntity( weight, trackingId, sender, recipient, state, futureHops, visitedHops );
+
+        return parcelEntity;
+    }
+
+    @Override
+    public ParcelEntity ParcelNewParcelinfoDtoToEntity(Parcel parcelDto, NewParcelInfo newParcelInfoDto) {
+        if ( parcelDto == null && newParcelInfoDto == null ) {
+            return null;
+        }
+
+        Float weight = null;
+        RecipientEntity recipient = null;
+        RecipientEntity sender = null;
+        if ( parcelDto != null ) {
+            weight = parcelDto.getWeight();
+            recipient = recipientToRecipientEntity( parcelDto.getRecipient() );
+            sender = recipientToRecipientEntity( parcelDto.getSender() );
+        }
+        String trackingId = null;
+        if ( newParcelInfoDto != null ) {
+            trackingId = newParcelInfoDto.getTrackingId();
+        }
+
         StateEnumEntity state = null;
         List<HopArrivalEntity> futureHops = null;
         List<HopArrivalEntity> visitedHops = null;

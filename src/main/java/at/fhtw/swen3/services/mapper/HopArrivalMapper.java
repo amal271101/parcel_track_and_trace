@@ -13,5 +13,7 @@ public interface HopArrivalMapper {
 
     HopArrival entityToDto(HopArrivalEntity hopArrivalEntity);
 
-    HopEntity dtoToEntity(Hop hop );
+    HopArrivalEntity dtoToEntity(HopArrival hop);
+
+    HopEntity dtoToEntity(Hop hop);
 }

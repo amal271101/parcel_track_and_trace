@@ -36,5 +36,10 @@ public interface ParcelEntityMapper {
     @Mapping(source = "newParcelInfoDto.trackingId", target = "trackingId")
     ParcelEntity NewParcelInfoDtoToEntity( NewParcelInfo newParcelInfoDto);
 
+    @Mapping(source = "parcelDto.weight", target = "weight")
+    @Mapping(source = "parcelDto.recipient", target = "recipient")
+    @Mapping(source = "parcelDto.sender", target = "sender")
+    @Mapping(source = "newParcelInfoDto.trackingId", target = "trackingId")
 
+    ParcelEntity ParcelNewParcelinfoDtoToEntity(Parcel parcelDto, NewParcelInfo newParcelInfoDto);
 }
