@@ -8,7 +8,7 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-22T16:37:25+0200",
+    date = "2022-10-23T22:52:20+0200",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
 )
 public class TransferwarehouseMapperImpl implements TransferwarehouseMapper {
@@ -40,27 +40,17 @@ public class TransferwarehouseMapperImpl implements TransferwarehouseMapper {
             return null;
         }
 
-        String regionGeoJson = null;
-        String logisticsPartner = null;
-        String logisticsPartnerUrl = null;
-        String hopType = null;
-        String code = null;
-        String description = null;
-        Integer processingDelayMins = null;
-        String locationName = null;
-        GeoCoordinateEntity locationCoordinates = null;
+        TransferwarehouseEntity transferwarehouseEntity = new TransferwarehouseEntity();
 
-        regionGeoJson = transferwarehouse.getRegionGeoJson();
-        logisticsPartner = transferwarehouse.getLogisticsPartner();
-        logisticsPartnerUrl = transferwarehouse.getLogisticsPartnerUrl();
-        hopType = transferwarehouse.getHopType();
-        code = transferwarehouse.getCode();
-        description = transferwarehouse.getDescription();
-        processingDelayMins = transferwarehouse.getProcessingDelayMins();
-        locationName = transferwarehouse.getLocationName();
-        locationCoordinates = geoCoordinateToGeoCoordinateEntity( transferwarehouse.getLocationCoordinates() );
-
-        TransferwarehouseEntity transferwarehouseEntity = new TransferwarehouseEntity( regionGeoJson, logisticsPartner, logisticsPartnerUrl, hopType, code, description, processingDelayMins, locationName, locationCoordinates );
+        transferwarehouseEntity.setRegionGeoJson( transferwarehouse.getRegionGeoJson() );
+        transferwarehouseEntity.setLogisticsPartner( transferwarehouse.getLogisticsPartner() );
+        transferwarehouseEntity.setLogisticsPartnerUrl( transferwarehouse.getLogisticsPartnerUrl() );
+        transferwarehouseEntity.setHopType( transferwarehouse.getHopType() );
+        transferwarehouseEntity.setCode( transferwarehouse.getCode() );
+        transferwarehouseEntity.setDescription( transferwarehouse.getDescription() );
+        transferwarehouseEntity.setProcessingDelayMins( transferwarehouse.getProcessingDelayMins() );
+        transferwarehouseEntity.setLocationName( transferwarehouse.getLocationName() );
+        transferwarehouseEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( transferwarehouse.getLocationCoordinates() ) );
 
         return transferwarehouseEntity;
     }
@@ -83,13 +73,10 @@ public class TransferwarehouseMapperImpl implements TransferwarehouseMapper {
             return null;
         }
 
-        Double lat = null;
-        Double lon = null;
+        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity();
 
-        lat = geoCoordinate.getLat();
-        lon = geoCoordinate.getLon();
-
-        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity( lat, lon );
+        geoCoordinateEntity.setLat( geoCoordinate.getLat() );
+        geoCoordinateEntity.setLon( geoCoordinate.getLon() );
 
         return geoCoordinateEntity;
     }

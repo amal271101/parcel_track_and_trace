@@ -8,7 +8,7 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-22T16:37:25+0200",
+    date = "2022-10-23T22:52:20+0200",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
 )
 public class TruckMapperImpl implements TruckMapper {
@@ -39,25 +39,16 @@ public class TruckMapperImpl implements TruckMapper {
             return null;
         }
 
-        String regionGeoJson = null;
-        String numberPlate = null;
-        String hopType = null;
-        String code = null;
-        String description = null;
-        String locationName = null;
-        Integer processingDelayMins = null;
-        GeoCoordinateEntity locationCoordinates = null;
+        TruckEntity truckEntity = new TruckEntity();
 
-        regionGeoJson = truck.getRegionGeoJson();
-        numberPlate = truck.getNumberPlate();
-        hopType = truck.getHopType();
-        code = truck.getCode();
-        description = truck.getDescription();
-        locationName = truck.getLocationName();
-        processingDelayMins = truck.getProcessingDelayMins();
-        locationCoordinates = geoCoordinateToGeoCoordinateEntity( truck.getLocationCoordinates() );
-
-        TruckEntity truckEntity = new TruckEntity( regionGeoJson, numberPlate, hopType, code, description, locationName, processingDelayMins, locationCoordinates );
+        truckEntity.setRegionGeoJson( truck.getRegionGeoJson() );
+        truckEntity.setNumberPlate( truck.getNumberPlate() );
+        truckEntity.setHopType( truck.getHopType() );
+        truckEntity.setCode( truck.getCode() );
+        truckEntity.setDescription( truck.getDescription() );
+        truckEntity.setLocationName( truck.getLocationName() );
+        truckEntity.setProcessingDelayMins( truck.getProcessingDelayMins() );
+        truckEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( truck.getLocationCoordinates() ) );
 
         return truckEntity;
     }
@@ -80,13 +71,10 @@ public class TruckMapperImpl implements TruckMapper {
             return null;
         }
 
-        Double lat = null;
-        Double lon = null;
+        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity();
 
-        lat = geoCoordinate.getLat();
-        lon = geoCoordinate.getLon();
-
-        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity( lat, lon );
+        geoCoordinateEntity.setLat( geoCoordinate.getLat() );
+        geoCoordinateEntity.setLon( geoCoordinate.getLon() );
 
         return geoCoordinateEntity;
     }

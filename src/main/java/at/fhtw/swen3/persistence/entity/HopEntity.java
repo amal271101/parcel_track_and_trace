@@ -1,17 +1,22 @@
 package at.fhtw.swen3.persistence.entity;
 
-import at.fhtw.swen3.services.dto.GeoCoordinate;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
+
 @Getter
 @Setter
-@AllArgsConstructor
+@Entity
 public class HopEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
+    private String code;
+
+
     private String hopType;
 
-    private String code;
 
     private String description;
 
@@ -19,5 +24,6 @@ public class HopEntity {
 
     private String locationName;
 
-    private GeoCoordinate locationCoordinates;
+    @OneToOne
+    private GeoCoordinateEntity locationCoordinates;
 }

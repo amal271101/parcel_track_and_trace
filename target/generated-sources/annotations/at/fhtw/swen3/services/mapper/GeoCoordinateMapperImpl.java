@@ -6,7 +6,7 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-22T16:37:25+0200",
+    date = "2022-10-23T22:52:20+0200",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
 )
 public class GeoCoordinateMapperImpl implements GeoCoordinateMapper {
@@ -31,13 +31,10 @@ public class GeoCoordinateMapperImpl implements GeoCoordinateMapper {
             return null;
         }
 
-        Double lat = null;
-        Double lon = null;
+        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity();
 
-        lat = geoCoordinate.getLat();
-        lon = geoCoordinate.getLon();
-
-        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity( lat, lon );
+        geoCoordinateEntity.setLat( geoCoordinate.getLat() );
+        geoCoordinateEntity.setLon( geoCoordinate.getLon() );
 
         return geoCoordinateEntity;
     }

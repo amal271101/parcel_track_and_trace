@@ -1,8 +1,11 @@
 package at.fhtw.swen3.services.mapper;
 
 import at.fhtw.swen3.persistence.entity.GeoCoordinateEntity;
+import at.fhtw.swen3.persistence.entity.HopEntity;
 import at.fhtw.swen3.persistence.entity.WarehouseEntity;
+import at.fhtw.swen3.persistence.entity.WarehouseNextHopsEntity;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
+import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.dto.WarehouseNextHops;
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-22T16:37:25+0200",
+    date = "2022-10-23T22:52:20+0200",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
 )
 public class WareHouseMapperImpl implements WareHouseMapper {
@@ -31,10 +34,7 @@ public class WareHouseMapperImpl implements WareHouseMapper {
         warehouse.locationName( warehouseEntity.getLocationName() );
         warehouse.locationCoordinates( geoCoordinateEntityToGeoCoordinate( warehouseEntity.getLocationCoordinates() ) );
         warehouse.setLevel( warehouseEntity.getLevel() );
-        List<WarehouseNextHops> list = warehouseEntity.getNextHops();
-        if ( list != null ) {
-            warehouse.setNextHops( new ArrayList<WarehouseNextHops>( list ) );
-        }
+        warehouse.setNextHops( warehouseNextHopsEntityListToWarehouseNextHopsList( warehouseEntity.getNextHops() ) );
 
         return warehouse;
     }
@@ -45,28 +45,16 @@ public class WareHouseMapperImpl implements WareHouseMapper {
             return null;
         }
 
-        Integer level = null;
-        List<WarehouseNextHops> nextHops = null;
-        String hopType = null;
-        String code = null;
-        String description = null;
-        Integer processingDelayMins = null;
-        String locationName = null;
-        GeoCoordinateEntity locationCoordinates = null;
+        WarehouseEntity warehouseEntity = new WarehouseEntity();
 
-        level = warehouse.getLevel();
-        List<WarehouseNextHops> list = warehouse.getNextHops();
-        if ( list != null ) {
-            nextHops = new ArrayList<WarehouseNextHops>( list );
-        }
-        hopType = warehouse.getHopType();
-        code = warehouse.getCode();
-        description = warehouse.getDescription();
-        processingDelayMins = warehouse.getProcessingDelayMins();
-        locationName = warehouse.getLocationName();
-        locationCoordinates = geoCoordinateToGeoCoordinateEntity( warehouse.getLocationCoordinates() );
-
-        WarehouseEntity warehouseEntity = new WarehouseEntity( level, nextHops, hopType, code, description, processingDelayMins, locationName, locationCoordinates );
+        warehouseEntity.setLevel( warehouse.getLevel() );
+        warehouseEntity.setNextHops( warehouseNextHopsListToWarehouseNextHopsEntityList( warehouse.getNextHops() ) );
+        warehouseEntity.setHopType( warehouse.getHopType() );
+        warehouseEntity.setCode( warehouse.getCode() );
+        warehouseEntity.setDescription( warehouse.getDescription() );
+        warehouseEntity.setProcessingDelayMins( warehouse.getProcessingDelayMins() );
+        warehouseEntity.setLocationName( warehouse.getLocationName() );
+        warehouseEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( warehouse.getLocationCoordinates() ) );
 
         return warehouseEntity;
     }
@@ -84,19 +72,102 @@ public class WareHouseMapperImpl implements WareHouseMapper {
         return geoCoordinate;
     }
 
+    protected Hop hopEntityToHop(HopEntity hopEntity) {
+        if ( hopEntity == null ) {
+            return null;
+        }
+
+        Hop hop = new Hop();
+
+        hop.setHopType( hopEntity.getHopType() );
+        hop.setCode( hopEntity.getCode() );
+        hop.setDescription( hopEntity.getDescription() );
+        hop.setProcessingDelayMins( hopEntity.getProcessingDelayMins() );
+        hop.setLocationName( hopEntity.getLocationName() );
+        hop.setLocationCoordinates( geoCoordinateEntityToGeoCoordinate( hopEntity.getLocationCoordinates() ) );
+
+        return hop;
+    }
+
+    protected WarehouseNextHops warehouseNextHopsEntityToWarehouseNextHops(WarehouseNextHopsEntity warehouseNextHopsEntity) {
+        if ( warehouseNextHopsEntity == null ) {
+            return null;
+        }
+
+        WarehouseNextHops warehouseNextHops = new WarehouseNextHops();
+
+        warehouseNextHops.setTraveltimeMins( warehouseNextHopsEntity.getTraveltimeMins() );
+        warehouseNextHops.setHop( hopEntityToHop( warehouseNextHopsEntity.getHop() ) );
+
+        return warehouseNextHops;
+    }
+
+    protected List<WarehouseNextHops> warehouseNextHopsEntityListToWarehouseNextHopsList(List<WarehouseNextHopsEntity> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<WarehouseNextHops> list1 = new ArrayList<WarehouseNextHops>( list.size() );
+        for ( WarehouseNextHopsEntity warehouseNextHopsEntity : list ) {
+            list1.add( warehouseNextHopsEntityToWarehouseNextHops( warehouseNextHopsEntity ) );
+        }
+
+        return list1;
+    }
+
     protected GeoCoordinateEntity geoCoordinateToGeoCoordinateEntity(GeoCoordinate geoCoordinate) {
         if ( geoCoordinate == null ) {
             return null;
         }
 
-        Double lat = null;
-        Double lon = null;
+        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity();
 
-        lat = geoCoordinate.getLat();
-        lon = geoCoordinate.getLon();
-
-        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity( lat, lon );
+        geoCoordinateEntity.setLat( geoCoordinate.getLat() );
+        geoCoordinateEntity.setLon( geoCoordinate.getLon() );
 
         return geoCoordinateEntity;
+    }
+
+    protected HopEntity hopToHopEntity(Hop hop) {
+        if ( hop == null ) {
+            return null;
+        }
+
+        HopEntity hopEntity = new HopEntity();
+
+        hopEntity.setCode( hop.getCode() );
+        hopEntity.setHopType( hop.getHopType() );
+        hopEntity.setDescription( hop.getDescription() );
+        hopEntity.setProcessingDelayMins( hop.getProcessingDelayMins() );
+        hopEntity.setLocationName( hop.getLocationName() );
+        hopEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( hop.getLocationCoordinates() ) );
+
+        return hopEntity;
+    }
+
+    protected WarehouseNextHopsEntity warehouseNextHopsToWarehouseNextHopsEntity(WarehouseNextHops warehouseNextHops) {
+        if ( warehouseNextHops == null ) {
+            return null;
+        }
+
+        WarehouseNextHopsEntity warehouseNextHopsEntity = new WarehouseNextHopsEntity();
+
+        warehouseNextHopsEntity.setTraveltimeMins( warehouseNextHops.getTraveltimeMins() );
+        warehouseNextHopsEntity.setHop( hopToHopEntity( warehouseNextHops.getHop() ) );
+
+        return warehouseNextHopsEntity;
+    }
+
+    protected List<WarehouseNextHopsEntity> warehouseNextHopsListToWarehouseNextHopsEntityList(List<WarehouseNextHops> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<WarehouseNextHopsEntity> list1 = new ArrayList<WarehouseNextHopsEntity>( list.size() );
+        for ( WarehouseNextHops warehouseNextHops : list ) {
+            list1.add( warehouseNextHopsToWarehouseNextHopsEntity( warehouseNextHops ) );
+        }
+
+        return list1;
     }
 }

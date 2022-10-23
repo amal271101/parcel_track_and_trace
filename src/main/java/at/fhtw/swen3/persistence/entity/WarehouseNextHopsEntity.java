@@ -1,16 +1,20 @@
 package at.fhtw.swen3.persistence.entity;
 
-import at.fhtw.swen3.services.dto.Hop;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
+
 @Getter
 @Setter
-@AllArgsConstructor
+@Entity
 public class WarehouseNextHopsEntity {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable = false)
     private Integer traveltimeMins;
 
-    private Hop hop;
+    @OneToOne
+    @JoinColumn()
+    private HopEntity hop;
 }

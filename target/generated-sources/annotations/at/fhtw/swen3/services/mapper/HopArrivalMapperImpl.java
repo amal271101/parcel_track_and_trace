@@ -1,5 +1,6 @@
 package at.fhtw.swen3.services.mapper;
 
+import at.fhtw.swen3.persistence.entity.GeoCoordinateEntity;
 import at.fhtw.swen3.persistence.entity.HopArrivalEntity;
 import at.fhtw.swen3.persistence.entity.HopEntity;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
@@ -10,7 +11,7 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-22T16:37:25+0200",
+    date = "2022-10-23T22:52:20+0200",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
 )
 public class HopArrivalMapperImpl implements HopArrivalMapper {
@@ -55,22 +56,28 @@ public class HopArrivalMapperImpl implements HopArrivalMapper {
             return null;
         }
 
-        String hopType = null;
-        String code = null;
-        String description = null;
-        Integer processingDelayMins = null;
-        String locationName = null;
-        GeoCoordinate locationCoordinates = null;
+        HopEntity hopEntity = new HopEntity();
 
-        hopType = hop.getHopType();
-        code = hop.getCode();
-        description = hop.getDescription();
-        processingDelayMins = hop.getProcessingDelayMins();
-        locationName = hop.getLocationName();
-        locationCoordinates = hop.getLocationCoordinates();
-
-        HopEntity hopEntity = new HopEntity( hopType, code, description, processingDelayMins, locationName, locationCoordinates );
+        hopEntity.setCode( hop.getCode() );
+        hopEntity.setHopType( hop.getHopType() );
+        hopEntity.setDescription( hop.getDescription() );
+        hopEntity.setProcessingDelayMins( hop.getProcessingDelayMins() );
+        hopEntity.setLocationName( hop.getLocationName() );
+        hopEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( hop.getLocationCoordinates() ) );
 
         return hopEntity;
+    }
+
+    protected GeoCoordinateEntity geoCoordinateToGeoCoordinateEntity(GeoCoordinate geoCoordinate) {
+        if ( geoCoordinate == null ) {
+            return null;
+        }
+
+        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity();
+
+        geoCoordinateEntity.setLat( geoCoordinate.getLat() );
+        geoCoordinateEntity.setLon( geoCoordinate.getLon() );
+
+        return geoCoordinateEntity;
     }
 }

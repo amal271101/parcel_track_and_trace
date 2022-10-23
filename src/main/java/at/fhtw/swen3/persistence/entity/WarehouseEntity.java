@@ -1,21 +1,24 @@
 package at.fhtw.swen3.persistence.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.*;
 import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
-public class WarehouseEntity {
+@Entity
+public class WarehouseEntity extends HopEntity{
 
     private Integer level;
 
     @NotEmpty(message = "nextHops cannot be null")
+    @OneToMany
     private List<WarehouseNextHopsEntity> nextHops;
 
     private String hopType;
@@ -29,6 +32,7 @@ public class WarehouseEntity {
 
     private String locationName;
 
+    @OneToOne
     private GeoCoordinateEntity locationCoordinates;
 
 

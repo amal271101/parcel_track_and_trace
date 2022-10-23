@@ -1,13 +1,15 @@
 package at.fhtw.swen3.persistence.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+
 @Getter
 @Setter
-@AllArgsConstructor
-public class TransferwarehouseEntity {
+@Entity
+public class TransferwarehouseEntity extends HopEntity{
 
     private String regionGeoJson;
 
@@ -25,6 +27,7 @@ public class TransferwarehouseEntity {
 
     private String locationName;
 
+    @OneToOne
     private GeoCoordinateEntity locationCoordinates;
 
 }

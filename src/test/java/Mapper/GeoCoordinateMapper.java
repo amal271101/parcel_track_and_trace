@@ -11,8 +11,10 @@ public class GeoCoordinateMapper {
     @Test
     void EntitytoDto() {
 
-        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity(2.334423, 2.33423242323);
+        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity();
 
+        geoCoordinateEntity.setLat(2.334423);
+        geoCoordinateEntity.setLon(3.556);
         GeoCoordinate geoCoordinate = at.fhtw.swen3.services.mapper.GeoCoordinateMapper.INSTANCE.entityToDto(geoCoordinateEntity);
 
         assertEquals(geoCoordinateEntity.getLat(), geoCoordinate.getLat());
