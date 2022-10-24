@@ -1,5 +1,10 @@
 package at.fhtw.swen3.persistence.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class ErrorEntitiy {
-    String error;
+    private String errorMessage;
 }
