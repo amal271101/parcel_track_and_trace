@@ -120,7 +120,7 @@ public class ParcelApiController implements ParcelApi {
             for (ConstraintViolation<ParcelEntity> violation : parcelViolations) {
                 log.error(violation.getMessage());
             }
-            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
