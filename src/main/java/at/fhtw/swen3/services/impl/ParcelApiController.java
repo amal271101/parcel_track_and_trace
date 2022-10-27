@@ -8,7 +8,7 @@ import at.fhtw.swen3.services.ParcelApi;
 import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.services.mapper.HopArrivalMapper;
 import at.fhtw.swen3.services.mapper.NewParcelInfoMapper;
-import at.fhtw.swen3.services.mapper.ParcelEntityMapper;
+import at.fhtw.swen3.services.mapper.ParcelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,7 @@ public class ParcelApiController implements ParcelApi {
         hop.setCode(code);
         hop.setDateTime(OffsetDateTime.now());
 
-        ParcelEntity parcelEntity = ParcelEntityMapper.INSTANCE.NewParcelInfoDtoToEntity(newParcelInfodto);
+        ParcelEntity parcelEntity = ParcelMapper.INSTANCE.NewParcelInfoDtoToEntity(newParcelInfodto);
         HopArrivalEntity hopArrivalEntity = HopArrivalMapper.INSTANCE.dtoToEntity(hop);
 
         Set<ConstraintViolation<HopArrivalEntity>> hopArrivalViolations = validator.validate(hopArrivalEntity);
@@ -112,7 +112,7 @@ public class ParcelApiController implements ParcelApi {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
-        ParcelEntity parcelEntity = ParcelEntityMapper.INSTANCE.ParcelDtoToEntity(parcel);
+        ParcelEntity parcelEntity = ParcelMapper.INSTANCE.ParcelDtoToEntity(parcel);
 
         Set<ConstraintViolation<ParcelEntity>> parcelViolations = validator.validate(parcelEntity);
 
@@ -156,7 +156,7 @@ public class ParcelApiController implements ParcelApi {
 
         NewParcelInfo newParcelInfodto = new NewParcelInfo();
         newParcelInfodto.setTrackingId(trackingId);
-        ParcelEntity parcelEntity = ParcelEntityMapper.INSTANCE.ParcelNewParcelinfoDtoToEntity(parcel, newParcelInfodto);
+        ParcelEntity parcelEntity = ParcelMapper.INSTANCE.ParcelNewParcelinfoDtoToEntity(parcel, newParcelInfodto);
 
 
         Set<ConstraintViolation<ParcelEntity>> violations = validator.validate(parcelEntity);

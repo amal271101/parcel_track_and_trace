@@ -5,7 +5,7 @@ import at.fhtw.swen3.persistence.entity.WarehouseEntity;
 import at.fhtw.swen3.services.WarehouseApi;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
-import at.fhtw.swen3.services.mapper.WareHouseMapper;
+import at.fhtw.swen3.services.mapper.WarehouseMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class WarehouseApiController implements WarehouseApi {
         Validator validator = factory.getValidator();
 
        for (Warehouse W : list) {
-          WarehouseEntity warehouseEntity = WareHouseMapper.INSTANCE.dtoToEntity(W);
+          WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.dtoToEntity(W);
             Set<ConstraintViolation<WarehouseEntity>> violations = validator.validate(warehouseEntity);
             if (violations.size() != 0) {
                 for (ConstraintViolation<WarehouseEntity> violation : violations) {
@@ -80,7 +80,7 @@ public class WarehouseApiController implements WarehouseApi {
         Warehouse warehouse =new Warehouse();
         warehouse.setCode(code);
 
-        WarehouseEntity warehouseEntity = WareHouseMapper.INSTANCE.dtoToEntity(warehouse);
+        WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.dtoToEntity(warehouse);
         Set<ConstraintViolation<WarehouseEntity>> violations = validator.validate(warehouseEntity);
         if (violations.size() != 0) {
             for (ConstraintViolation<WarehouseEntity> violation : violations) {
@@ -95,7 +95,7 @@ public class WarehouseApiController implements WarehouseApi {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
-        WarehouseEntity warehouseEntity = WareHouseMapper.INSTANCE.dtoToEntity(warehouse);
+        WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.dtoToEntity(warehouse);
         Set<ConstraintViolation<WarehouseEntity>> violations = validator.validate(warehouseEntity);
         if (violations.size() != 0) {
             for (ConstraintViolation<WarehouseEntity> violation : violations) {

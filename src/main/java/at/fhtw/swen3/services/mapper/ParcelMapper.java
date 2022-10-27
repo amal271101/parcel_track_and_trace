@@ -9,8 +9,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface ParcelEntityMapper {
-    ParcelEntityMapper INSTANCE = Mappers.getMapper(ParcelEntityMapper.class);
+public interface ParcelMapper {
+    ParcelMapper INSTANCE = Mappers.getMapper(ParcelMapper.class);
 
     @Mapping(source = "parcelDto.weight", target = "weight")
     @Mapping(source = "parcelDto.recipient", target = "recipient")

@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -12,6 +14,8 @@ public class HopEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
+
+    @Pattern(regexp = "^[A-Z]{4}\\d{1,4}$")
     private String code;
 
 
@@ -24,6 +28,7 @@ public class HopEntity {
 
     private String locationName;
 
+    @NotNull
     @OneToOne
     private GeoCoordinateEntity locationCoordinates;
 }

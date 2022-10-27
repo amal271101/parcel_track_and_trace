@@ -2,6 +2,7 @@ package Mapper;
 
 import at.fhtw.swen3.persistence.entity.ParcelEntity;
 import at.fhtw.swen3.services.dto.*;
+import at.fhtw.swen3.services.mapper.ParcelMapper;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;
@@ -60,7 +61,7 @@ public class ParcelEntityMapper {
         parcelDto.sender(senderDto);
         parcelDto.weight(weight);
 
-        ParcelEntity parcel = at.fhtw.swen3.services.mapper.ParcelEntityMapper.INSTANCE.dtosToEntity( parcelDto,trackingInformationdto,newParcelInfodto);
+        ParcelEntity parcel = ParcelMapper.INSTANCE.dtosToEntity( parcelDto,trackingInformationdto,newParcelInfodto);
 
         assertEquals(parcel.getWeight(),weight);
 
@@ -89,7 +90,7 @@ public class ParcelEntityMapper {
         trackingInformationdto.setFutureHops(visitedHopsDto);
 
 
-        ParcelEntity parcel = at.fhtw.swen3.services.mapper.ParcelEntityMapper.INSTANCE.TrackingInformationToParcelEntity(trackingInformationdto);
+        ParcelEntity parcel = ParcelMapper.INSTANCE.TrackingInformationToParcelEntity(trackingInformationdto);
 
         assertEquals(parcel.getVisitedHops().get(0).getCode(), visitedHopsDto.get(0).getCode());
         assertEquals(parcel.getFutureHops().get(1).getDescription(), visitedHopsDto.get(1).getDescription());

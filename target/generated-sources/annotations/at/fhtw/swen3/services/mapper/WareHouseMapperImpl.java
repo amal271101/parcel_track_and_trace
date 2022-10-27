@@ -14,10 +14,10 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-24T21:39:41+0200",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
+    date = "2022-10-27T19:08:39+0200",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
-public class WareHouseMapperImpl implements WareHouseMapper {
+public class WarehouseMapperImpl implements WarehouseMapper {
 
     @Override
     public Warehouse entityToDto(WarehouseEntity warehouseEntity) {

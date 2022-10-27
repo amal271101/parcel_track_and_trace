@@ -1,18 +1,14 @@
 package at.fhtw.swen3.services.mapper;
 
-import at.fhtw.swen3.persistence.entity.GeoCoordinateEntity;
 import at.fhtw.swen3.persistence.entity.HopArrivalEntity;
-import at.fhtw.swen3.persistence.entity.HopEntity;
-import at.fhtw.swen3.services.dto.GeoCoordinate;
-import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.HopArrival;
 import java.time.OffsetDateTime;
 import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-24T21:39:41+0200",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
+    date = "2022-10-27T19:08:39+0200",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
 )
 public class HopArrivalMapperImpl implements HopArrivalMapper {
 
@@ -48,36 +44,5 @@ public class HopArrivalMapperImpl implements HopArrivalMapper {
         HopArrivalEntity hopArrivalEntity = new HopArrivalEntity( code, description, dateTime );
 
         return hopArrivalEntity;
-    }
-
-    @Override
-    public HopEntity dtoToEntity(Hop hop) {
-        if ( hop == null ) {
-            return null;
-        }
-
-        HopEntity hopEntity = new HopEntity();
-
-        hopEntity.setCode( hop.getCode() );
-        hopEntity.setHopType( hop.getHopType() );
-        hopEntity.setDescription( hop.getDescription() );
-        hopEntity.setProcessingDelayMins( hop.getProcessingDelayMins() );
-        hopEntity.setLocationName( hop.getLocationName() );
-        hopEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( hop.getLocationCoordinates() ) );
-
-        return hopEntity;
-    }
-
-    protected GeoCoordinateEntity geoCoordinateToGeoCoordinateEntity(GeoCoordinate geoCoordinate) {
-        if ( geoCoordinate == null ) {
-            return null;
-        }
-
-        GeoCoordinateEntity geoCoordinateEntity = new GeoCoordinateEntity();
-
-        geoCoordinateEntity.setLat( geoCoordinate.getLat() );
-        geoCoordinateEntity.setLon( geoCoordinate.getLon() );
-
-        return geoCoordinateEntity;
     }
 }

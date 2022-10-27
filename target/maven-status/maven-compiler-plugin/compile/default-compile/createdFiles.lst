@@ -1,5 +1,7 @@
-at/fhtw/swen3/services/WarehouseApi.class
-at/fhtw/swen3/openapitools/OpenApiGeneratorApplication.class
-at/fhtw/swen3/openapitools/RFC3339DateFormat.class
-at/fhtw/swen3/services/ApiUtil.class
-at/fhtw/swen3/services/ParcelApi.class
+at\fhtw\swen3\services\mapper\ErrorMapper.class
+at\fhtw\swen3\openapitools\RFC3339DateFormat.class
+at\fhtw\swen3\services\ParcelApi.class
+at\fhtw\swen3\services\ApiUtil.class
+at\fhtw\swen3\services\WarehouseApi.class
+at\fhtw\swen3\openapitools\OpenApiGeneratorApplication.class
+at\fhtw\swen3\persistence\entity\ErrorEntitiy.class
