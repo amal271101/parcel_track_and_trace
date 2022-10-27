@@ -6,8 +6,8 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-27T19:08:39+0200",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
+    date = "2022-10-27T21:08:57+0200",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
 )
 public class RecipientMapperImpl implements RecipientMapper {
 
@@ -34,19 +34,13 @@ public class RecipientMapperImpl implements RecipientMapper {
             return null;
         }
 
-        String name = null;
-        String street = null;
-        String postalCode = null;
-        String city = null;
-        String country = null;
+        RecipientEntity recipientEntity = new RecipientEntity();
 
-        name = recipient.getName();
-        street = recipient.getStreet();
-        postalCode = recipient.getPostalCode();
-        city = recipient.getCity();
-        country = recipient.getCountry();
-
-        RecipientEntity recipientEntity = new RecipientEntity( name, street, postalCode, city, country );
+        recipientEntity.setName( recipient.getName() );
+        recipientEntity.setStreet( recipient.getStreet() );
+        recipientEntity.setPostalCode( recipient.getPostalCode() );
+        recipientEntity.setCity( recipient.getCity() );
+        recipientEntity.setCountry( recipient.getCountry() );
 
         return recipientEntity;
     }

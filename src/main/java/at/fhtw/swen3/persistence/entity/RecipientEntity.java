@@ -1,16 +1,18 @@
 package at.fhtw.swen3.persistence.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@Entity
 public class RecipientEntity {
 
+    @Id
     @Pattern(regexp = "[A-Za-z-/ öÖÜüÄä]+")
     private String name;
 

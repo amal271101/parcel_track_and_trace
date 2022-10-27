@@ -12,7 +12,6 @@ import javax.validation.constraints.Pattern;
 @Entity
 public class HopEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
 
     @Pattern(regexp = "^[A-Z]{4}\\d{1,4}$")

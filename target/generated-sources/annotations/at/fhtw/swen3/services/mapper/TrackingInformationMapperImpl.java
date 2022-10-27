@@ -1,5 +1,6 @@
 package at.fhtw.swen3.services.mapper;
 
+import at.fhtw.swen3.persistence.entity.HopArrivalEntity;
 import at.fhtw.swen3.persistence.entity.TrackingInformationEntity;
 import at.fhtw.swen3.persistence.entity.TrackingInformationEntity.StateEnumEntity;
 import at.fhtw.swen3.services.dto.HopArrival;
@@ -11,8 +12,8 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-27T19:08:39+0200",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
+    date = "2022-10-27T21:08:57+0200",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
 )
 public class TrackingInformationMapperImpl implements TrackingInformationMapper {
 
@@ -25,14 +26,8 @@ public class TrackingInformationMapperImpl implements TrackingInformationMapper 
         TrackingInformation trackingInformation = new TrackingInformation();
 
         trackingInformation.setState( stateEnumEntityToStateEnum( trackingInformationEntity.getState() ) );
-        List<HopArrival> list = trackingInformationEntity.getVisitedHops();
-        if ( list != null ) {
-            trackingInformation.setVisitedHops( new ArrayList<HopArrival>( list ) );
-        }
-        List<HopArrival> list1 = trackingInformationEntity.getFutureHops();
-        if ( list1 != null ) {
-            trackingInformation.setFutureHops( new ArrayList<HopArrival>( list1 ) );
-        }
+        trackingInformation.setVisitedHops( hopArrivalEntityListToHopArrivalList( trackingInformationEntity.getVisitedHops() ) );
+        trackingInformation.setFutureHops( hopArrivalEntityListToHopArrivalList( trackingInformationEntity.getFutureHops() ) );
 
         return trackingInformation;
     }
@@ -43,21 +38,11 @@ public class TrackingInformationMapperImpl implements TrackingInformationMapper 
             return null;
         }
 
-        StateEnumEntity state = null;
-        List<HopArrival> futureHops = null;
-        List<HopArrival> visitedHops = null;
+        TrackingInformationEntity trackingInformationEntity = new TrackingInformationEntity();
 
-        state = stateEnumToStateEnumEntity( trackingInformation.getState() );
-        List<HopArrival> list = trackingInformation.getFutureHops();
-        if ( list != null ) {
-            futureHops = new ArrayList<HopArrival>( list );
-        }
-        List<HopArrival> list1 = trackingInformation.getVisitedHops();
-        if ( list1 != null ) {
-            visitedHops = new ArrayList<HopArrival>( list1 );
-        }
-
-        TrackingInformationEntity trackingInformationEntity = new TrackingInformationEntity( state, futureHops, visitedHops );
+        trackingInformationEntity.setState( stateEnumToStateEnumEntity( trackingInformation.getState() ) );
+        trackingInformationEntity.setFutureHops( hopArrivalListToHopArrivalEntityList( trackingInformation.getFutureHops() ) );
+        trackingInformationEntity.setVisitedHops( hopArrivalListToHopArrivalEntityList( trackingInformation.getVisitedHops() ) );
 
         return trackingInformationEntity;
     }
@@ -86,6 +71,33 @@ public class TrackingInformationMapperImpl implements TrackingInformationMapper 
         return stateEnum;
     }
 
+    protected HopArrival hopArrivalEntityToHopArrival(HopArrivalEntity hopArrivalEntity) {
+        if ( hopArrivalEntity == null ) {
+            return null;
+        }
+
+        HopArrival hopArrival = new HopArrival();
+
+        hopArrival.setCode( hopArrivalEntity.getCode() );
+        hopArrival.setDescription( hopArrivalEntity.getDescription() );
+        hopArrival.setDateTime( hopArrivalEntity.getDateTime() );
+
+        return hopArrival;
+    }
+
+    protected List<HopArrival> hopArrivalEntityListToHopArrivalList(List<HopArrivalEntity> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<HopArrival> list1 = new ArrayList<HopArrival>( list.size() );
+        for ( HopArrivalEntity hopArrivalEntity : list ) {
+            list1.add( hopArrivalEntityToHopArrival( hopArrivalEntity ) );
+        }
+
+        return list1;
+    }
+
     protected StateEnumEntity stateEnumToStateEnumEntity(StateEnum stateEnum) {
         if ( stateEnum == null ) {
             return null;
@@ -108,5 +120,32 @@ public class TrackingInformationMapperImpl implements TrackingInformationMapper 
         }
 
         return stateEnumEntity;
+    }
+
+    protected HopArrivalEntity hopArrivalToHopArrivalEntity(HopArrival hopArrival) {
+        if ( hopArrival == null ) {
+            return null;
+        }
+
+        HopArrivalEntity hopArrivalEntity = new HopArrivalEntity();
+
+        hopArrivalEntity.setCode( hopArrival.getCode() );
+        hopArrivalEntity.setDescription( hopArrival.getDescription() );
+        hopArrivalEntity.setDateTime( hopArrival.getDateTime() );
+
+        return hopArrivalEntity;
+    }
+
+    protected List<HopArrivalEntity> hopArrivalListToHopArrivalEntityList(List<HopArrival> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<HopArrivalEntity> list1 = new ArrayList<HopArrivalEntity>( list.size() );
+        for ( HopArrival hopArrival : list ) {
+            list1.add( hopArrivalToHopArrivalEntity( hopArrival ) );
+        }
+
+        return list1;
     }
 }

@@ -2,13 +2,12 @@ package at.fhtw.swen3.services.mapper;
 
 import at.fhtw.swen3.persistence.entity.HopArrivalEntity;
 import at.fhtw.swen3.services.dto.HopArrival;
-import java.time.OffsetDateTime;
 import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-10-27T19:08:39+0200",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.2 (Oracle Corporation)"
+    date = "2022-10-27T21:08:57+0200",
+    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
 )
 public class HopArrivalMapperImpl implements HopArrivalMapper {
 
@@ -33,15 +32,11 @@ public class HopArrivalMapperImpl implements HopArrivalMapper {
             return null;
         }
 
-        String code = null;
-        String description = null;
-        OffsetDateTime dateTime = null;
+        HopArrivalEntity hopArrivalEntity = new HopArrivalEntity();
 
-        code = hop.getCode();
-        description = hop.getDescription();
-        dateTime = hop.getDateTime();
-
-        HopArrivalEntity hopArrivalEntity = new HopArrivalEntity( code, description, dateTime );
+        hopArrivalEntity.setCode( hop.getCode() );
+        hopArrivalEntity.setDescription( hop.getDescription() );
+        hopArrivalEntity.setDateTime( hop.getDateTime() );
 
         return hopArrivalEntity;
     }

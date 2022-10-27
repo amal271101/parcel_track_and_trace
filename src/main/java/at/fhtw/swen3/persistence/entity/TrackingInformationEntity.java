@@ -1,16 +1,16 @@
 package at.fhtw.swen3.persistence.entity;
 
-import at.fhtw.swen3.services.dto.HopArrival;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@Entity
 public class TrackingInformationEntity {
     public enum StateEnumEntity {
         PICKUP("Pickup"),
@@ -42,8 +42,22 @@ public class TrackingInformationEntity {
 
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column()
+    private Long id;
+
+    @Column()
     private StateEnumEntity state;
-    private List<HopArrival> futureHops ;
-    private List<HopArrival> visitedHops ;
+
+    @Column()
+    @OneToMany
+    @NotNull(message = "futureHops cannot be null")
+    private List<HopArrivalEntity> futureHops;
+
+    @Column()
+    @OneToMany
+    @NotNull(message = "visitedHops cannot be null")
+    private List<HopArrivalEntity> visitedHops;
 
 }

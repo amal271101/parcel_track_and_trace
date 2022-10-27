@@ -17,6 +17,7 @@ public class WarehouseEntity extends HopEntity{
 
     private Integer level;
 
+    @NotNull
     @NotEmpty(message = "nextHops cannot be null")
     @OneToMany
     private List<WarehouseNextHopsEntity> nextHops;

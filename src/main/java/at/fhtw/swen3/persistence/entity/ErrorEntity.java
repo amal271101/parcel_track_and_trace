@@ -11,7 +11,6 @@ import javax.persistence.Id;
 @Entity
 
 public class ErrorEntity {
-
     @Id
     private String errorMessage;
 
