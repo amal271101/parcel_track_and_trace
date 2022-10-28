@@ -11,7 +11,10 @@ import javax.persistence.*;
 public class GeoCoordinateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column( nullable = false)
+    @Column(nullable = false)
+    private Long id;
+
+    @Column
     private Double lat;
 
     private Double lon;

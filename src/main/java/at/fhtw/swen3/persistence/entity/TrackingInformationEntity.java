@@ -44,18 +44,18 @@ public class TrackingInformationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column()
+    @Column
     private Long id;
 
     @Column()
     private StateEnumEntity state;
 
-    @Column()
+    @Column
     @OneToMany
     @NotNull(message = "futureHops cannot be null")
     private List<HopArrivalEntity> futureHops;
 
-    @Column()
+    @Column
     @OneToMany
     @NotNull(message = "visitedHops cannot be null")
     private List<HopArrivalEntity> visitedHops;
