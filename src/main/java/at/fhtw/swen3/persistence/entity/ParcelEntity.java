@@ -13,7 +13,7 @@ import java.util.List;
 public class ParcelEntity {
 
     @Column
-    @DecimalMin("0.0")
+    @DecimalMin("1.0")
     @NotNull(message = "weight must be between 1 and 10")
     private Float weight;
 
