@@ -16,7 +16,7 @@ public class ParcelApiControllerTest {
         NativeWebRequest nativeWebRequest = null;
         ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
         ResponseEntity<Void> responseEntity = parcelApiController.reportParcelDelivery(null);
-        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED).getStatusCode());
+        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }
 
     @Test
@@ -24,7 +24,7 @@ public class ParcelApiControllerTest {
         NativeWebRequest nativeWebRequest = null;
         ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
         ResponseEntity<Void> responseEntity = parcelApiController.reportParcelDelivery("A3Z6F7B6N");
-        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.OK).getStatusCode());
+        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.CREATED).getStatusCode());
     }
 
 
@@ -33,7 +33,7 @@ public class ParcelApiControllerTest {
         NativeWebRequest nativeWebRequest = null;
         ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
         ResponseEntity<Void> responseEntity = parcelApiController.reportParcelHop("A3Z6F7B6N", "ABVF9");
-        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED).getStatusCode());
+        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }
 
     @Test
@@ -64,7 +64,7 @@ public class ParcelApiControllerTest {
         NativeWebRequest nativeWebRequest = null;
         ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
         ResponseEntity<NewParcelInfo> responseEntity = parcelApiController.submitParcel(parcelDto);
-        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED).getStatusCode());
+        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }
 
 
@@ -73,7 +73,7 @@ public class ParcelApiControllerTest {
         NativeWebRequest nativeWebRequest = null;
         ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
         ResponseEntity<TrackingInformation> responseEntity = parcelApiController.trackParcel("parcelDto");
-        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED).getStatusCode());
+        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
 
     }
 
@@ -82,7 +82,7 @@ public class ParcelApiControllerTest {
         NativeWebRequest nativeWebRequest = null;
         ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
         ResponseEntity<TrackingInformation> responseEntity = parcelApiController.trackParcel("A3Z6F7B6N");
-        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.OK).getStatusCode());
+        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.CREATED).getStatusCode());
 
     }
     @Test
@@ -110,7 +110,7 @@ public class ParcelApiControllerTest {
         NativeWebRequest nativeWebRequest = null;
         ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
         ResponseEntity<NewParcelInfo> responseEntity = parcelApiController.transitionParcel("A3Z6F7B6N",parcelDto);
-        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED).getStatusCode());
+        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
 
     }
 }

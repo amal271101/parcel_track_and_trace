@@ -64,7 +64,7 @@ public class WarehouseApiController implements WarehouseApi {
                 for (ConstraintViolation<WarehouseEntity> violation : violations) {
                     log.error(violation.getMessage());
                 }
-                return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
         }
@@ -86,7 +86,7 @@ public class WarehouseApiController implements WarehouseApi {
             for (ConstraintViolation<WarehouseEntity> violation : violations) {
                 log.error(violation.getMessage());
             }
-            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -101,7 +101,7 @@ public class WarehouseApiController implements WarehouseApi {
             for (ConstraintViolation<WarehouseEntity> violation : violations) {
                 log.error(violation.getMessage());
             }
-            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

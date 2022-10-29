@@ -59,9 +59,9 @@ public class ParcelApiController implements ParcelApi {
                 log.error(violation.getMessage());
 
             }
-            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     public ResponseEntity<Void> reportParcelHop(String trackingId, String code) {
@@ -84,7 +84,7 @@ public class ParcelApiController implements ParcelApi {
                 log.error(violation.getMessage());
 
             }
-            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
 
@@ -101,7 +101,7 @@ public class ParcelApiController implements ParcelApi {
                 log.error(violation.getMessage());
 
             }
-            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -120,10 +120,10 @@ public class ParcelApiController implements ParcelApi {
             for (ConstraintViolation<ParcelEntity> violation : parcelViolations) {
                 log.error(violation.getMessage());
             }
-            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 
@@ -143,9 +143,9 @@ public class ParcelApiController implements ParcelApi {
                 log.error(violation.getMessage());
 
             }
-            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
@@ -164,10 +164,10 @@ public class ParcelApiController implements ParcelApi {
             for (ConstraintViolation<ParcelEntity> violation : violations) {
                 log.error(violation.getMessage());
             }
-            return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
 
