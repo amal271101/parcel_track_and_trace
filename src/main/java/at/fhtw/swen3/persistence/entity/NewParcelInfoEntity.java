@@ -14,8 +14,9 @@ import javax.validation.constraints.Pattern;
 @Entity
 public class NewParcelInfoEntity {
     @Column
-    @Id
     @NotNull
     @Pattern(regexp = "^[A-Z0-9]{9}$")
     private String trackingId;
+    @Id
+    private Long id;
 }

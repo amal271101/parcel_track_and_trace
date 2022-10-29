@@ -12,15 +12,12 @@ import java.util.List;
 @Entity
 public class ParcelEntity {
 
-
     @Column
     @DecimalMin("0.0")
-    @DecimalMax("10.0")
     @NotNull(message = "weight must be between 1 and 10")
     private Float weight;
 
     @Column
-    @Id
     @Pattern(regexp = "^[A-Z0-9]{9}$")
     private String trackingId;
 
@@ -43,4 +40,7 @@ public class ParcelEntity {
     @OneToMany
     @NotNull(message = "visitedHops cannot be null")
     private List<HopArrivalEntity> visitedHops;
+    @Id
+    private Long id;
+
 }

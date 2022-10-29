@@ -11,7 +11,7 @@ import javax.validation.constraints.Pattern;
 @Setter
 @Entity
 public class HopEntity {
-    @Id
+
     @Column(nullable = false)
     @Pattern(regexp = "^[A-Z]{4}\\d{1,4}$")
     private String code;
@@ -31,4 +31,8 @@ public class HopEntity {
     @NotNull
     @OneToOne
     private GeoCoordinateEntity locationCoordinates;
+
+    @Id
+    private Long id;
+
 }

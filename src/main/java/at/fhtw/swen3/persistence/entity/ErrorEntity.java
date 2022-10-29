@@ -17,7 +17,4 @@ public class ErrorEntity {
 
     private String errorMessage;
 
-
-
-
 }

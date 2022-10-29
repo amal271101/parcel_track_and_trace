@@ -43,5 +43,4 @@ public class WarehouseEntity extends HopEntity{
     @OneToOne
     private GeoCoordinateEntity locationCoordinates;
 
-
 }
