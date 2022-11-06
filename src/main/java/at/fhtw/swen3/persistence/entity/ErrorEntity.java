@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-
+@Table(name = "error_entity")
 public class ErrorEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

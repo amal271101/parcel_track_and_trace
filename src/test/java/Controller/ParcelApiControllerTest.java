@@ -1,7 +1,7 @@
 package Controller;
 
 import at.fhtw.swen3.services.dto.*;
-import at.fhtw.swen3.services.impl.ParcelApiController;
+import at.fhtw.swen3.controller.rest.ParcelApiController;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

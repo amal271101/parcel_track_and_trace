@@ -2,7 +2,7 @@ package Controller;
 
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
-import at.fhtw.swen3.services.impl.WarehouseApiController;
+import at.fhtw.swen3.controller.rest.WarehouseApiController;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
