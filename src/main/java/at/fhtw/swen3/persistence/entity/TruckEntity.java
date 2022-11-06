@@ -6,10 +6,12 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Getter
 @Setter
 @Entity
+@Table(name = "truck")
 public class TruckEntity extends HopEntity {
     @Column
     private String regionGeoJson;

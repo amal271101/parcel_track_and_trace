@@ -8,6 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "geoCoordinate")
 public class GeoCoordinateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

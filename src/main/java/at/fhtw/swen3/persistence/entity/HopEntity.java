@@ -10,6 +10,7 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 @Entity
+@Table(name = "hop")
 public class HopEntity {
 
     @Column(nullable = false)

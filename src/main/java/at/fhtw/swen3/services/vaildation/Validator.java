@@ -1,13 +1,11 @@
 package at.fhtw.swen3.services.vaildation;
 
 import at.fhtw.swen3.controller.rest.ParcelApiController;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
@@ -26,12 +24,15 @@ public class Validator {
         return getValidatorFactory().getValidator();
     }
 
-    public <T> void validate(T o) {
+   public  <T> boolean validate(T o) {
         javax.validation.Validator validator = getValidator();
         Set<ConstraintViolation<T>> violations = validator.validate(o);
         violations.forEach(v -> log.error(v.getMessage()));
         if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
+            //throw new ConstraintViolationException(violations);
+            return false;
         }
+        return true;
+
     }
 }

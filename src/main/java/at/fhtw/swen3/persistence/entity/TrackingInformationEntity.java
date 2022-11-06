@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name = "trackingInformation")
 public class TrackingInformationEntity {
     public enum StateEnumEntity {
         PICKUP("Pickup"),

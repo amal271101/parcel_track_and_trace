@@ -28,7 +28,7 @@ public class ParcelServiceImpl implements ParcelService{
 
    @Override
    public boolean createParcel(ParcelEntity parcelEntity) {
-      myValidator.validate(parcelEntity);
+      if(myValidator.validate(parcelEntity)){return false;};
       parcelRepository.save(parcelEntity);
       return true;
    }

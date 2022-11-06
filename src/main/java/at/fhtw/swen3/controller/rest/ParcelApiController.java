@@ -116,7 +116,7 @@ public class ParcelApiController implements ParcelApi {
 
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.ParcelDtoToEntity(parcel);
 
-        parcelService.createParcel(parcelEntity);
+       if(parcelService.createParcel(parcelEntity)){return new ResponseEntity<>(HttpStatus.OK);} ;
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
