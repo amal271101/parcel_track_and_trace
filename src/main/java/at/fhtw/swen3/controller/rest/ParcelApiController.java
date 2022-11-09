@@ -1,9 +1,9 @@
 package at.fhtw.swen3.controller.rest;
 
 
-import at.fhtw.swen3.persistence.entity.HopArrivalEntity;
-import at.fhtw.swen3.persistence.entity.NewParcelInfoEntity;
-import at.fhtw.swen3.persistence.entity.ParcelEntity;
+import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
+import at.fhtw.swen3.persistence.entities.NewParcelInfoEntity;
+import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.services.ParcelApi;
 import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.services.impl.ParcelServiceImpl;

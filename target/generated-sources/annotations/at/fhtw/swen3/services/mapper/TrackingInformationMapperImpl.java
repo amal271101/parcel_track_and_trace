@@ -1,8 +1,8 @@
 package at.fhtw.swen3.services.mapper;
 
-import at.fhtw.swen3.persistence.entity.HopArrivalEntity;
-import at.fhtw.swen3.persistence.entity.TrackingInformationEntity;
-import at.fhtw.swen3.persistence.entity.TrackingInformationEntity.StateEnumEntity;
+import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
+import at.fhtw.swen3.persistence.entities.TrackingInformationEntity;
+import at.fhtw.swen3.persistence.entities.TrackingInformationEntity.StateEnumEntity;
 import at.fhtw.swen3.services.dto.HopArrival;
 import at.fhtw.swen3.services.dto.TrackingInformation;
 import at.fhtw.swen3.services.dto.TrackingInformation.StateEnum;
@@ -12,7 +12,7 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-11-07T00:04:02+0100",
+    date = "2022-11-08T12:26:57+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 18.0.2.1 (Oracle Corporation)"
 )
 public class TrackingInformationMapperImpl implements TrackingInformationMapper {
