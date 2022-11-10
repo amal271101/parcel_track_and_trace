@@ -36,14 +36,15 @@ public class ParcelEntity {
     private TrackingInformationEntity.StateEnumEntity state;
 
     @Column
-    @OneToMany
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
     @NotNull(message = "futureHops cannot be null")
     private List<HopArrivalEntity> futureHops;
 
-    @OneToMany
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
     @NotNull(message = "visitedHops cannot be null")
     private List<HopArrivalEntity> visitedHops;
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
 }

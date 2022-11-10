@@ -16,8 +16,8 @@ public class Validator {
     private static final Logger log = LoggerFactory.getLogger(ParcelApiController.class);
 
     static ValidatorFactory getValidatorFactory() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        return factory;
+
+        return Validation.buildDefaultValidatorFactory();
     }
 
     javax.validation.Validator getValidator() {
@@ -27,8 +27,8 @@ public class Validator {
    public  <T> boolean validate(T o) {
         javax.validation.Validator validator = getValidator();
         Set<ConstraintViolation<T>> violations = validator.validate(o);
-        violations.forEach(v -> log.error(v.getMessage()));
         if (!violations.isEmpty()) {
+            violations.forEach(v -> log.error(v.getMessage()));
             //throw new ConstraintViolationException(violations);
             return false;
         }
