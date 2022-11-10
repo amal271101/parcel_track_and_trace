@@ -1,6 +1,5 @@
 package at.fhtw.swen3.services.impl;
 
-import at.fhtw.swen3.controller.rest.ParcelApiController;
 import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.persistence.entities.TrackingInformationEntity;
@@ -8,28 +7,20 @@ import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.persistence.repositories.RecipientRepository;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.vaildation.Validator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+@AllArgsConstructor
 
-@Service
-//@Slf4j
+@Slf4j
 public class ParcelServiceImpl implements ParcelService {
 
-   private static final Logger log = LoggerFactory.getLogger(ParcelApiController.class);
+   private ParcelRepository parcelRepository;
+   private RecipientRepository recipientRepository;
 
-   @Autowired
-   protected ParcelRepository parcelRepository;
-
-   @Autowired
-   protected RecipientRepository recipientRepository;
-
-   @Autowired
    private Validator myValidator;
 
    @Override
