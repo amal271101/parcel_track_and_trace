@@ -27,6 +27,6 @@ jobs:
 env:
   DB_DATASOURCE: ${{secrets.DB_DATASOURCE}}
   DB_USERNAME: ${{secrets.DB_USERNAME}}
-  DB_PASSWORD: ${{secrets.PASSWORD}}
+  DB_PASSWORD: ${{secrets.DB_PASSWORD}}
 
   
