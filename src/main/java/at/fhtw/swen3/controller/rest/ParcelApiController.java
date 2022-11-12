@@ -1,17 +1,14 @@
 package at.fhtw.swen3.controller.rest;
-
-
 import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
 import at.fhtw.swen3.persistence.entities.NewParcelInfoEntity;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.services.ParcelApi;
+import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.dto.*;
-import at.fhtw.swen3.services.impl.ParcelServiceImpl;
 import at.fhtw.swen3.services.mapper.HopArrivalMapper;
 import at.fhtw.swen3.services.mapper.NewParcelInfoMapper;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,16 +26,16 @@ import javax.validation.*;
 @RequestMapping("${openapi.parcelLogisticsService.base-path:}")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-09-24T11:01:08.846404Z[Etc/UTC]")
 @Controller
+@Slf4j
 public class ParcelApiController implements ParcelApi {
-    private static final Logger log = LoggerFactory.getLogger(ParcelApiController.class);
 
-    @Autowired
-    private ParcelServiceImpl parcelService;
+
+    private ParcelService parcelService;
     private final NativeWebRequest request;
 
-    @Autowired
-    public ParcelApiController(NativeWebRequest request) {
+    public ParcelApiController(NativeWebRequest request, ParcelService parcelService) {
         this.request = request;
+        this.parcelService= parcelService;
     }
 
 
@@ -111,12 +108,11 @@ public class ParcelApiController implements ParcelApi {
     }
 
 
-    public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel
-    ) {
+    public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel) {
 
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.ParcelDtoToEntity(parcel);
 
-       if(parcelService.createParcel(parcelEntity)){return new ResponseEntity<>(HttpStatus.OK);} ;
+       if(parcelService.createParcel(parcelEntity)){return new ResponseEntity<>(HttpStatus.CREATED);} ;
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

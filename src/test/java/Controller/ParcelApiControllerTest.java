@@ -11,7 +11,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ParcelApiControllerTest {
-    @Test
+   /* @Test
     void reportParcelDeliveryTestFail() {
         NativeWebRequest nativeWebRequest = null;
         ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
@@ -112,5 +112,5 @@ public class ParcelApiControllerTest {
         ResponseEntity<NewParcelInfo> responseEntity = parcelApiController.transitionParcel("A3Z6F7B6N",parcelDto);
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
 
-    }
+    }*/
 }

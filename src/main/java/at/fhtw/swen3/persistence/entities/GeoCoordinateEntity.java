@@ -18,5 +18,6 @@ public class GeoCoordinateEntity {
     @Column
     private Double lat;
 
+    @Column
     private Double lon;
 }
