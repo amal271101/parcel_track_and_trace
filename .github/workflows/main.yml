@@ -64,4 +64,8 @@ jobs:
           version_label: ${{github.SHA}}
           region: us-east-1
           deployment_package: openapi-spring-1.22.1.jar
+    env:
+          DB_DATASOURCE: ${{secrets.DB_DATASOURCE}}
+          DB_USERNAME: ${{secrets.DB_USERNAME}}
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
 
