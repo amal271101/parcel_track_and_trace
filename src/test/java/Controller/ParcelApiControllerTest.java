@@ -3,40 +3,36 @@ package Controller;
 import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.controller.rest.ParcelApiController;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.context.request.NativeWebRequest;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 public class ParcelApiControllerTest {
-   /* @Test
+    @Autowired
+    private ParcelApiController parcelController;
+
+   @Test
     void reportParcelDeliveryTestFail() {
-        NativeWebRequest nativeWebRequest = null;
-        ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
-        ResponseEntity<Void> responseEntity = parcelApiController.reportParcelDelivery(null);
+        ResponseEntity<Void> responseEntity = parcelController.reportParcelDelivery("null");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }
 
     @Test
     void reportParcelDeliveryTestSuccess() {
-        NativeWebRequest nativeWebRequest = null;
-        ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
-        ResponseEntity<Void> responseEntity = parcelApiController.reportParcelDelivery("A3Z6F7B6N");
+        ResponseEntity<Void> responseEntity = parcelController.reportParcelDelivery("A3Z6F7B6N");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.CREATED).getStatusCode());
     }
 
 
     @Test
     void reportParcelHopTestFail() {
-        NativeWebRequest nativeWebRequest = null;
-        ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
-        ResponseEntity<Void> responseEntity = parcelApiController.reportParcelHop("A3Z6F7B6N", "ABVF9");
+        ResponseEntity<Void> responseEntity = parcelController.reportParcelHop("A3Z6F7B6N", "ABVF9");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }
 
-    @Test
+   /* @Test
     void submitParcelTestFail() {
 
         Float weight = 0.45f;
@@ -61,27 +57,21 @@ public class ParcelApiControllerTest {
         parcelDto.sender(senderDto);
         parcelDto.weight(weight);
 
-        NativeWebRequest nativeWebRequest = null;
-        ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
-        ResponseEntity<NewParcelInfo> responseEntity = parcelApiController.submitParcel(parcelDto);
+        ResponseEntity<NewParcelInfo> responseEntity = parcelController.submitParcel(parcelDto);
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
-    }
+    }*/
 
 
     @Test
     void trackParcelTestFail() {
-        NativeWebRequest nativeWebRequest = null;
-        ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
-        ResponseEntity<TrackingInformation> responseEntity = parcelApiController.trackParcel("parcelDto");
+        ResponseEntity<TrackingInformation> responseEntity = parcelController.trackParcel("parcelDto");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
 
     }
 
     @Test
     void trackParcelTestSuccess() {
-        NativeWebRequest nativeWebRequest = null;
-        ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
-        ResponseEntity<TrackingInformation> responseEntity = parcelApiController.trackParcel("A3Z6F7B6N");
+        ResponseEntity<TrackingInformation> responseEntity = parcelController.trackParcel("A3Z6F7B6N");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.CREATED).getStatusCode());
 
     }
@@ -107,10 +97,8 @@ public class ParcelApiControllerTest {
         parcelDto.recipient(recipientDto);
         parcelDto.sender(senderDto);
         parcelDto.weight(weight);
-        NativeWebRequest nativeWebRequest = null;
-        ParcelApiController parcelApiController = new ParcelApiController(nativeWebRequest);
-        ResponseEntity<NewParcelInfo> responseEntity = parcelApiController.transitionParcel("A3Z6F7B6N",parcelDto);
+        ResponseEntity<NewParcelInfo> responseEntity = parcelController.transitionParcel("A3Z6F7B6N",parcelDto);
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
 
-    }*/
+    }
 }
