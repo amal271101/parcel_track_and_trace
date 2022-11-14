@@ -1,5 +1,4 @@
 package at.fhtw.swen3.configuration;
-
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.persistence.repositories.RecipientRepository;
 import at.fhtw.swen3.persistence.repositories.WarehouseNextHopsRepository;

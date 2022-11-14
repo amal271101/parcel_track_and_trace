@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TrackingInformationRepository extends JpaRepository<TrackingInformationEntity, Integer> {
+public interface TrackingInformationRepository extends JpaRepository<TrackingInformationEntity, Long> {
+TrackingInformationEntity findByState(TrackingInformationEntity.StateEnumEntity stateEnumEntity);
 }

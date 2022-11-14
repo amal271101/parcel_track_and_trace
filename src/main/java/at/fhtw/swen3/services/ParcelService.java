@@ -1,6 +1,7 @@
 package at.fhtw.swen3.services;
 
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
+import org.springframework.stereotype.Service;
 
 public interface ParcelService {
     public void createParcelDelivery();

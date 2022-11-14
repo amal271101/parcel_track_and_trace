@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WarehouseNextHopsRepository extends JpaRepository<WarehouseNextHopsEntity, Integer> {
+    WarehouseNextHopsEntity findByTraveltimeMins(int mins);
 }

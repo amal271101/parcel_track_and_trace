@@ -29,11 +29,11 @@ public class HopEntity {
     @Column
     private String locationName;
 
-    @NotNull
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
+    @JoinColumn(name="geocoordinate_id", nullable=false)
     private GeoCoordinateEntity locationCoordinates;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
 }

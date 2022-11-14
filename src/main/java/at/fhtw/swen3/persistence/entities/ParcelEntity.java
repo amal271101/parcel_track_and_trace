@@ -35,7 +35,6 @@ public class ParcelEntity {
     @Column
     private TrackingInformationEntity.StateEnumEntity state;
 
-    @Column
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
     @NotNull(message = "futureHops cannot be null")
     private List<HopArrivalEntity> futureHops;

@@ -8,21 +8,20 @@ import at.fhtw.swen3.persistence.repositories.RecipientRepository;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.vaildation.Validator;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class ParcelServiceImpl implements ParcelService {
 
-   private ParcelRepository parcelRepository;
-   private RecipientRepository recipientRepository;
-
-   private Validator myValidator;
+   private final ParcelRepository parcelRepository;
+   private final RecipientRepository recipientRepository;
+   private final Validator myValidator;
 
    @Override
    public void createParcelDelivery() {
@@ -44,9 +43,9 @@ public class ParcelServiceImpl implements ParcelService {
 
       visitedHops.add(hop);
       log.info(String.valueOf(visitedHops.get(0).getDateTime()));
-      //parcelEntity.setFutureHops(visitedHops);
-   //   parcelEntity.setVisitedHops(visitedHops);
-     // parcelEntity.setState(TrackingInformationEntity.StateEnumEntity.PICKUP);
+      parcelEntity.setFutureHops(visitedHops);
+        parcelEntity.setVisitedHops(visitedHops);
+     parcelEntity.setState(TrackingInformationEntity.StateEnumEntity.PICKUP);
 
       if(!myValidator.validate(parcelEntity)){return false;}
       recipientRepository.save(parcelEntity.getRecipient());

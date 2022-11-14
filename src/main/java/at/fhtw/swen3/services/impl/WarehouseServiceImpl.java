@@ -5,17 +5,17 @@ import at.fhtw.swen3.persistence.repositories.WarehouseRepository;
 import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.vaildation.Validator;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class WarehouseServiceImpl implements WarehouseService {
 
-  private WarehouseRepository warehouseRepository;
-  private WarehouseNextHopsRepository warehouseNextHopsRepository;
-  private Validator myValidator;
+  private final WarehouseRepository warehouseRepository;
+  private final WarehouseNextHopsRepository warehouseNextHopsRepository;
+  private final Validator myValidator;
 
     @Override
     public void exportWarehouses() {

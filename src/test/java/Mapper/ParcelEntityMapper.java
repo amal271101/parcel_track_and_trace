@@ -90,6 +90,7 @@ public class ParcelEntityMapper {
         trackingInformationdto.setFutureHops(visitedHopsDto);
 
 
+
         ParcelEntity parcel = ParcelMapper.INSTANCE.TrackingInformationToParcelEntity(trackingInformationdto);
 
         assertEquals(parcel.getVisitedHops().get(0).getCode(), visitedHopsDto.get(0).getCode());
@@ -102,19 +103,6 @@ public class ParcelEntityMapper {
         assertNull(parcel.getSender());
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

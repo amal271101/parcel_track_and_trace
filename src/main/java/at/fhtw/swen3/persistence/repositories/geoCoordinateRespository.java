@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GeoCoordinateRespository extends JpaRepository<GeoCoordinateEntity,Integer> {
-
+public interface geoCoordinateRespository extends JpaRepository<GeoCoordinateEntity,Long> {
+    GeoCoordinateEntity findByLat(Double lat);
 
 }

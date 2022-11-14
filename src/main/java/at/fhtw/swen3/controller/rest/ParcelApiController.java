@@ -9,7 +9,6 @@ import at.fhtw.swen3.services.mapper.HopArrivalMapper;
 import at.fhtw.swen3.services.mapper.NewParcelInfoMapper;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -114,7 +113,7 @@ public class ParcelApiController implements ParcelApi {
 
        if(parcelService.createParcel(parcelEntity)){return new ResponseEntity<>(HttpStatus.CREATED);} ;
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<TrackingInformation> trackParcel(String trackingId

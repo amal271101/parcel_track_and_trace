@@ -22,5 +22,6 @@ public class WarehouseNextHopsEntity {
 
     @NotNull
     @OneToOne
+    @JoinColumn(name="hop_id")
     private HopEntity hop;
 }
