@@ -59,7 +59,7 @@ public class ParcelRepositoryTest {
         recipientRepository.save(parcelEntity.getSender());
         parcelRepository.save(parcelEntity);
         assertEquals(parcelRepository.findByTrackingId(parcelEntity.getTrackingId()).getTrackingId(),parcelEntity.getTrackingId());
-        parcelRepository.delete(parcelRepository.findByTrackingId(parcelEntity.getTrackingId()));
+        parcelRepository.delete(parcelEntity);
         recipientRepository.delete(senderEntity);
         recipientRepository.delete(recipientEntity);
         assertNull(parcelRepository.findByTrackingId(parcelEntity.getTrackingId()));
