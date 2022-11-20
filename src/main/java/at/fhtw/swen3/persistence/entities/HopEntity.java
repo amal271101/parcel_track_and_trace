@@ -31,6 +31,7 @@ public class HopEntity {
 
     @OneToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
     @JoinColumn(name="geocoordinate_id", nullable=false)
+    @NotNull
     private GeoCoordinateEntity locationCoordinates;
 
     @Id

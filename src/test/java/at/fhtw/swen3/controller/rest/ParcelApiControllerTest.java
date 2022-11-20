@@ -1,4 +1,4 @@
-package Controller;
+package at.fhtw.swen3.controller.rest;
 
 import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.controller.rest.ParcelApiController;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ParcelApiControllerTest {
     private ParcelApiController parcelController= new ParcelApiController(null, null);
 
-   @Test
+    @Test
     void reportParcelDeliveryTestFail() {
         ResponseEntity<Void> responseEntity = parcelController.reportParcelDelivery("null");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());

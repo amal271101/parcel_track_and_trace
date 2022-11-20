@@ -12,6 +12,11 @@ import javax.persistence.*;
 public class TruckEntity extends HopEntity {
 
     @Column
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column
     private String regionGeoJson;
 
     @Column

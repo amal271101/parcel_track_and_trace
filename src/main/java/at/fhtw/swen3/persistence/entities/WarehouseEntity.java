@@ -13,6 +13,11 @@ import java.util.List;
 @Entity
 public class WarehouseEntity extends HopEntity{
     @Column
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column
     private Integer level;
 
     @Column

@@ -1,4 +1,4 @@
-package Controller;
+package at.fhtw.swen3.controller.rest;
 
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
@@ -10,13 +10,13 @@ import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class WareHouseApiControllerTest {
+public class WarehouseApiControllerTest {
 
     @Test
     void exportWarehousesTestFail(){
         WarehouseApiController wareHouseApiController = new WarehouseApiController(null);
         ResponseEntity<Warehouse> responseEntity = wareHouseApiController.exportWarehouses();
-            assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
+        assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }
 
     @Test

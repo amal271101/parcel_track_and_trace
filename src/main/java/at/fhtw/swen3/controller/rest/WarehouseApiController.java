@@ -2,7 +2,7 @@ package at.fhtw.swen3.controller.rest;
 
 
 import at.fhtw.swen3.persistence.entities.WarehouseEntity;
-import at.fhtw.swen3.services.WarehouseApi;
+import at.fhtw.swen3.controller.WarehouseApi;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.mapper.WarehouseMapper;

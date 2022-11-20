@@ -15,9 +15,11 @@ public class HopArrivalEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
+    @JoinColumn
     private Long id;
 
     @Column
+    @NotNull(message = "code cannot be null")
     @Pattern(regexp = "^[A-Z]{4}\\d{1,4}$")
     private String code;
 

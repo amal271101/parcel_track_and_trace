@@ -33,6 +33,7 @@ public class ParcelEntity {
     private RecipientEntity recipient;
 
     @Column
+    @NotNull(message = "state cannot be null")
     private TrackingInformationEntity.StateEnumEntity state;
 
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
