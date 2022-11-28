@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="postgres@trackntracedb.c9azrvju5tal.us-east-1.rds.amazonaws.com" uuid="36a291c2-e5db-4175-bb54-119e56839ee5">
+    <data-source source="LOCAL" name="trackntracedb@localhost" uuid="b4fccc9b-2f00-4f72-81c4-4ec652eb4eb3">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://trackntracedb.c9azrvju5tal.us-east-1.rds.amazonaws.com:5432/postgres</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/trackntracedb</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
