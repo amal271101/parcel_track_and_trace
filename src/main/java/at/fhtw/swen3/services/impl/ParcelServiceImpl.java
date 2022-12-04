@@ -39,6 +39,7 @@ public class ParcelServiceImpl implements ParcelService {
       parcelEntity.setTrackingId("PYJRB4HZ6");
       HopArrivalEntity hop = new HopArrivalEntity();
       hop.setDateTime(OffsetDateTime.now());
+      hop.setCode("ABAB790");
       List<HopArrivalEntity> visitedHops = new ArrayList<>();
 
       visitedHops.add(hop);
