@@ -108,11 +108,13 @@ public class ParcelApiController implements ParcelApi {
 
 
     public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel) {
-
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.ParcelDtoToEntity(parcel);
 
-       if(parcelService.createParcel(parcelEntity)){return new ResponseEntity<>(HttpStatus.CREATED);} ;
+        NewParcelInfo newParcelInfo = NewParcelInfoMapper.INSTANCE.entityToDto(parcelService.createParcel(parcelEntity));
 
+        if(newParcelInfo!=null){
+            return new ResponseEntity<>(newParcelInfo,HttpStatus.CREATED);
+        }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
