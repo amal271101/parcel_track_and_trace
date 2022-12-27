@@ -14,7 +14,7 @@ public class WarehouseApiControllerTest {
 
     @Test
     void exportWarehousesTestFail(){
-        WarehouseApiController wareHouseApiController = new WarehouseApiController(null);
+        WarehouseApiController wareHouseApiController = new WarehouseApiController(null, null);
         ResponseEntity<Warehouse> responseEntity = wareHouseApiController.exportWarehouses();
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }
@@ -22,7 +22,7 @@ public class WarehouseApiControllerTest {
     @Test
     void getWarehouseTestFail(){
 
-        WarehouseApiController wareHouseApiController = new WarehouseApiController(null);
+        WarehouseApiController wareHouseApiController = new WarehouseApiController(null, null);
         ResponseEntity<Hop> responseEntity = wareHouseApiController.getWarehouse("code");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }
@@ -32,7 +32,7 @@ public class WarehouseApiControllerTest {
         Warehouse warehouse =new Warehouse();
         warehouse.setCode("code");
 
-        WarehouseApiController wareHouseApiController = new WarehouseApiController(null);
+        WarehouseApiController wareHouseApiController = new WarehouseApiController(null, null);
         ResponseEntity<Void> responseEntity = wareHouseApiController.importWarehouses(warehouse);
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }

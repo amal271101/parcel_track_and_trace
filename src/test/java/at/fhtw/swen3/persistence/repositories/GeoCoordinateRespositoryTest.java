@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class GeoCoordinateRespositoryTest {
      @Autowired
-        private at.fhtw.swen3.persistence.repositories.geoCoordinateRespository geoCoordinateRespository;
+        private at.fhtw.swen3.persistence.repositories.GeoCoordinateRespository geoCoordinateRespository;
         @Test
         void saveAndDeleteGeoCoordinateEntity() {
 

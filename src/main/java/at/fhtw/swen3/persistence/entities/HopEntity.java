@@ -11,6 +11,7 @@ import javax.validation.constraints.Pattern;
 @Setter
 @Entity
 @Table(name = "hop")
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class HopEntity {
 
     @Column(nullable = false)

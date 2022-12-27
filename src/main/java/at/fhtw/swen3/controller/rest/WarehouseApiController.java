@@ -1,15 +1,16 @@
 package at.fhtw.swen3.controller.rest;
 
 
+import at.fhtw.swen3.persistence.entities.HopEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.controller.WarehouseApi;
 import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
+import at.fhtw.swen3.services.dto.WarehouseNextHops;
+import at.fhtw.swen3.services.mapper.HopMapperDecorator;
 import at.fhtw.swen3.services.mapper.WarehouseMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,28 +34,15 @@ import javax.validation.ValidatorFactory;
 @Slf4j
 public class WarehouseApiController implements WarehouseApi {
 
-    private WarehouseService warehouseService= new WarehouseService() {
-        @Override
-        public void exportWarehouses() {
-
-        }
-
-        @Override
-        public void getWarehousebyCode() {
-
-        }
-
-        @Override
-        public boolean importWarehouses(WarehouseEntity warehouseEntity) {
-        return true;
-        }
-    };
+    private WarehouseService warehouseService;
 
     private final NativeWebRequest request;
 
     @Autowired
-    public WarehouseApiController(NativeWebRequest request) {
+    public WarehouseApiController(NativeWebRequest request, WarehouseService warehouseService) {
+
         this.request = request;
+        this.warehouseService=warehouseService;
     }
 
     @Override
@@ -129,10 +117,14 @@ public class WarehouseApiController implements WarehouseApi {
     * */
     public ResponseEntity<Void> importWarehouses(Warehouse warehouse) {
         WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.dtoToEntity(warehouse);
-       if(warehouseService.importWarehouses(warehouseEntity)){
-            return new ResponseEntity<>(HttpStatus.OK);
 
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        HopEntity warehouseEntity1 = HopMapperDecorator.INSTANCE.dtoToEntity(warehouse.getNextHops().get(0).getHop());
+
+        WarehouseEntity warehouseEntity2 = (WarehouseEntity) warehouseEntity1;
+        System.out.println(warehouseEntity2.getCode());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+
 }
