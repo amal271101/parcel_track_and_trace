@@ -1,23 +1,24 @@
 package at.fhtw.swen3.services.mapper;
 
 import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
-import at.fhtw.swen3.persistence.entities.HopEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseNextHopsEntity;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
-import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.dto.WarehouseNextHops;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
+import org.mapstruct.factory.Mappers;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-12-27T20:54:59+0100",
+    date = "2022-12-28T23:16:41+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 public class WarehouseMapperImpl implements WarehouseMapper {
+
+    private final HopMapper hopMapper = Mappers.getMapper( HopMapper.class );
 
     @Override
     public Warehouse entityToDto(WarehouseEntity warehouseEntity) {
@@ -47,14 +48,14 @@ public class WarehouseMapperImpl implements WarehouseMapper {
 
         WarehouseEntity warehouseEntity = new WarehouseEntity();
 
-        warehouseEntity.setLevel( warehouse.getLevel() );
-        warehouseEntity.setNextHops( warehouseNextHopsListToWarehouseNextHopsEntityList( warehouse.getNextHops() ) );
-        warehouseEntity.setHopType( warehouse.getHopType() );
         warehouseEntity.setCode( warehouse.getCode() );
+        warehouseEntity.setHopType( warehouse.getHopType() );
         warehouseEntity.setDescription( warehouse.getDescription() );
         warehouseEntity.setProcessingDelayMins( warehouse.getProcessingDelayMins() );
         warehouseEntity.setLocationName( warehouse.getLocationName() );
         warehouseEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( warehouse.getLocationCoordinates() ) );
+        warehouseEntity.setLevel( warehouse.getLevel() );
+        warehouseEntity.setNextHops( warehouseNextHopsListToWarehouseNextHopsEntityList( warehouse.getNextHops() ) );
 
         return warehouseEntity;
     }
@@ -72,23 +73,6 @@ public class WarehouseMapperImpl implements WarehouseMapper {
         return geoCoordinate;
     }
 
-    protected Hop hopEntityToHop(HopEntity hopEntity) {
-        if ( hopEntity == null ) {
-            return null;
-        }
-
-        Hop hop = new Hop();
-
-        hop.setHopType( hopEntity.getHopType() );
-        hop.setCode( hopEntity.getCode() );
-        hop.setDescription( hopEntity.getDescription() );
-        hop.setProcessingDelayMins( hopEntity.getProcessingDelayMins() );
-        hop.setLocationName( hopEntity.getLocationName() );
-        hop.setLocationCoordinates( geoCoordinateEntityToGeoCoordinate( hopEntity.getLocationCoordinates() ) );
-
-        return hop;
-    }
-
     protected WarehouseNextHops warehouseNextHopsEntityToWarehouseNextHops(WarehouseNextHopsEntity warehouseNextHopsEntity) {
         if ( warehouseNextHopsEntity == null ) {
             return null;
@@ -97,7 +81,7 @@ public class WarehouseMapperImpl implements WarehouseMapper {
         WarehouseNextHops warehouseNextHops = new WarehouseNextHops();
 
         warehouseNextHops.setTraveltimeMins( warehouseNextHopsEntity.getTraveltimeMins() );
-        warehouseNextHops.setHop( hopEntityToHop( warehouseNextHopsEntity.getHop() ) );
+        warehouseNextHops.setHop( hopMapper.entityToDto( warehouseNextHopsEntity.getHop() ) );
 
         return warehouseNextHops;
     }
@@ -128,23 +112,6 @@ public class WarehouseMapperImpl implements WarehouseMapper {
         return geoCoordinateEntity;
     }
 
-    protected HopEntity hopToHopEntity(Hop hop) {
-        if ( hop == null ) {
-            return null;
-        }
-
-        HopEntity hopEntity = new HopEntity();
-
-        hopEntity.setCode( hop.getCode() );
-        hopEntity.setHopType( hop.getHopType() );
-        hopEntity.setDescription( hop.getDescription() );
-        hopEntity.setProcessingDelayMins( hop.getProcessingDelayMins() );
-        hopEntity.setLocationName( hop.getLocationName() );
-        hopEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( hop.getLocationCoordinates() ) );
-
-        return hopEntity;
-    }
-
     protected WarehouseNextHopsEntity warehouseNextHopsToWarehouseNextHopsEntity(WarehouseNextHops warehouseNextHops) {
         if ( warehouseNextHops == null ) {
             return null;
@@ -153,7 +120,7 @@ public class WarehouseMapperImpl implements WarehouseMapper {
         WarehouseNextHopsEntity warehouseNextHopsEntity = new WarehouseNextHopsEntity();
 
         warehouseNextHopsEntity.setTraveltimeMins( warehouseNextHops.getTraveltimeMins() );
-        warehouseNextHopsEntity.setHop( hopToHopEntity( warehouseNextHops.getHop() ) );
+        warehouseNextHopsEntity.setHop( hopMapper.dtoToEntity( warehouseNextHops.getHop() ) );
 
         return warehouseNextHopsEntity;
     }

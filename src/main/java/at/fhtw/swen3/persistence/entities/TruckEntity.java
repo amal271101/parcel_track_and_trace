@@ -2,6 +2,7 @@ package at.fhtw.swen3.persistence.entities;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.locationtech.jts.geom.Geometry;
 
 import javax.persistence.*;
 
@@ -21,24 +22,4 @@ public class TruckEntity extends HopEntity {
 
     @Column
     private String numberPlate;
-
-    @Column
-    private String hopType;
-
-    @Column
-    private String code;
-
-    @Column
-    private String description;
-
-    @Column
-    private String locationName;
-
-    @Column
-    private Integer processingDelayMins;
-
-    @OneToOne
-    private GeoCoordinateEntity locationCoordinates;
-
-
 }

@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-12-27T20:54:59+0100",
+    date = "2022-12-28T23:16:42+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 public class TransferwarehouseMapperImpl implements TransferwarehouseMapper {
@@ -42,15 +42,15 @@ public class TransferwarehouseMapperImpl implements TransferwarehouseMapper {
 
         TransferwarehouseEntity transferwarehouseEntity = new TransferwarehouseEntity();
 
-        transferwarehouseEntity.setRegionGeoJson( transferwarehouse.getRegionGeoJson() );
-        transferwarehouseEntity.setLogisticsPartner( transferwarehouse.getLogisticsPartner() );
-        transferwarehouseEntity.setLogisticsPartnerUrl( transferwarehouse.getLogisticsPartnerUrl() );
-        transferwarehouseEntity.setHopType( transferwarehouse.getHopType() );
         transferwarehouseEntity.setCode( transferwarehouse.getCode() );
+        transferwarehouseEntity.setHopType( transferwarehouse.getHopType() );
         transferwarehouseEntity.setDescription( transferwarehouse.getDescription() );
         transferwarehouseEntity.setProcessingDelayMins( transferwarehouse.getProcessingDelayMins() );
         transferwarehouseEntity.setLocationName( transferwarehouse.getLocationName() );
         transferwarehouseEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( transferwarehouse.getLocationCoordinates() ) );
+        transferwarehouseEntity.setRegionGeoJson( transferwarehouse.getRegionGeoJson() );
+        transferwarehouseEntity.setLogisticsPartner( transferwarehouse.getLogisticsPartner() );
+        transferwarehouseEntity.setLogisticsPartnerUrl( transferwarehouse.getLogisticsPartnerUrl() );
 
         return transferwarehouseEntity;
     }

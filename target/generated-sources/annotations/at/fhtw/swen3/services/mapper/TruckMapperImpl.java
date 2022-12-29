@@ -8,7 +8,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-12-27T20:54:59+0100",
+    date = "2022-12-28T23:16:42+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 public class TruckMapperImpl implements TruckMapper {
@@ -41,14 +41,14 @@ public class TruckMapperImpl implements TruckMapper {
 
         TruckEntity truckEntity = new TruckEntity();
 
+        truckEntity.setCode( truck.getCode() );
+        truckEntity.setHopType( truck.getHopType() );
+        truckEntity.setDescription( truck.getDescription() );
+        truckEntity.setProcessingDelayMins( truck.getProcessingDelayMins() );
+        truckEntity.setLocationName( truck.getLocationName() );
+        truckEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( truck.getLocationCoordinates() ) );
         truckEntity.setRegionGeoJson( truck.getRegionGeoJson() );
         truckEntity.setNumberPlate( truck.getNumberPlate() );
-        truckEntity.setHopType( truck.getHopType() );
-        truckEntity.setCode( truck.getCode() );
-        truckEntity.setDescription( truck.getDescription() );
-        truckEntity.setLocationName( truck.getLocationName() );
-        truckEntity.setProcessingDelayMins( truck.getProcessingDelayMins() );
-        truckEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( truck.getLocationCoordinates() ) );
 
         return truckEntity;
     }

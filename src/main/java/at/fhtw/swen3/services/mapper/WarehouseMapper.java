@@ -4,7 +4,7 @@ import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.services.dto.Warehouse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-@Mapper
+@Mapper(uses = HopMapper.class)
 public interface WarehouseMapper {
     WarehouseMapper INSTANCE = Mappers.getMapper(WarehouseMapper.class);
 

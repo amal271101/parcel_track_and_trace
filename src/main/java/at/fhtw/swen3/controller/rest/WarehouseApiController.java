@@ -2,12 +2,14 @@ package at.fhtw.swen3.controller.rest;
 
 
 import at.fhtw.swen3.persistence.entities.HopEntity;
+import at.fhtw.swen3.persistence.entities.TruckEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.controller.WarehouseApi;
 import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.dto.WarehouseNextHops;
+import at.fhtw.swen3.services.mapper.HopMapper;
 import at.fhtw.swen3.services.mapper.HopMapperDecorator;
 import at.fhtw.swen3.services.mapper.WarehouseMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -103,28 +105,13 @@ public class WarehouseApiController implements WarehouseApi {
     }
 
 
-    /*  public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel) {
-        ParcelEntity parcelEntity = ParcelMapper.INSTANCE.ParcelDtoToEntity(parcel);
-
-        NewParcelInfo newParcelInfo = NewParcelInfoMapper.INSTANCE.entityToDto(parcelService.createParcel(parcelEntity));
-
-        if(newParcelInfo!=null){
-            return new ResponseEntity<>(newParcelInfo,HttpStatus.CREATED);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-
-    * */
     public ResponseEntity<Void> importWarehouses(Warehouse warehouse) {
         WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.dtoToEntity(warehouse);
 
-        HopEntity warehouseEntity1 = HopMapperDecorator.INSTANCE.dtoToEntity(warehouse.getNextHops().get(0).getHop());
+       if(warehouseService.importWarehouses(warehouseEntity)){
+            return new ResponseEntity<>(HttpStatus.OK);
 
-        WarehouseEntity warehouseEntity2 = (WarehouseEntity) warehouseEntity1;
-        System.out.println(warehouseEntity2.getCode());
-        return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
-
-
 }

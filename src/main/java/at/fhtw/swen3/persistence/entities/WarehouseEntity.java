@@ -1,15 +1,21 @@
 package at.fhtw.swen3.persistence.entities;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.*;
 import java.util.List;
 
+@AllArgsConstructor
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 public class WarehouseEntity extends HopEntity{
     @Column
@@ -26,23 +32,6 @@ public class WarehouseEntity extends HopEntity{
     @OneToMany
     private List<WarehouseNextHopsEntity> nextHops;
 
-    @Column
-    private String hopType;
 
-    @Column
-    private String code;
-
-    @Column
-    @Pattern(regexp = "[A-Za-z1-9-/ öÖÜüÄäß]+")
-    private String description;
-
-    @Column
-    private Integer processingDelayMins;
-
-    @Column
-    private String locationName;
-
-    @OneToOne
-    private GeoCoordinateEntity locationCoordinates;
 
 }

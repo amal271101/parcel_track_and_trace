@@ -21,7 +21,7 @@ public class WarehouseNextHopsEntity {
     private Integer traveltimeMins;
 
     @NotNull
-    @OneToOne
+    @OneToOne (cascade = CascadeType.PERSIST)
     @JoinColumn(name="hop_id")
     private HopEntity hop;
 }

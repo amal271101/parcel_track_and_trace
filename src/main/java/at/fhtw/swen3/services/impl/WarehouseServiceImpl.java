@@ -36,25 +36,37 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     }
 
+
+
+  public void saveNestedWarehouses(List<WarehouseNextHopsEntity> nextHops) {
+    for (WarehouseNextHopsEntity nextHop : nextHops) {
+      switch (nextHop.getHop().getHopType()) {
+        case "warehouse":
+          geoCoordinateRespository.save(nextHop.getHop().getLocationCoordinates());
+          saveNestedWarehouses(((WarehouseEntity) nextHop.getHop()).getNextHops());
+          break;
+        case "truck":
+          geoCoordinateRespository.save(nextHop.getHop().getLocationCoordinates());
+          truckRepository.save((TruckEntity) nextHop.getHop());
+          break;
+        case "transferwarehouse":
+          geoCoordinateRespository.save(nextHop.getHop().getLocationCoordinates());
+          transferwarehouseRepository.save((TransferwarehouseEntity) nextHop.getHop());
+          break;
+        default:
+      }
+      //hopRepository.save(nextHop.getHop());
+      warehouseNextHopsRepository.save(  nextHop);
+    }
+  }
     @Override
     public boolean importWarehouses(WarehouseEntity warehouseEntity) {
-
-
-     /* if (!myValidator.validate(warehouseEntity)) {
+      if (!myValidator.validate(warehouseEntity)) {
         return false;
-      }*/
-
-      geoCoordinateRespository.save(warehouseEntity.getNextHops().get(0).getHop().getLocationCoordinates());
-      hopRepository.save(warehouseEntity.getNextHops().get(0).getHop());
-      warehouseNextHopsRepository.save(warehouseEntity.getNextHops().get(0));
-
-
-
-      //warehouseRepository.save(warehouseEntity);
-     /* for (WarehouseNextHopsEntity hop : warehouseEntity.getNextHops()) {
-        warehouseNextHopsRepository.save(hop);
-
-      }*/
+      }
+      saveNestedWarehouses(warehouseEntity.getNextHops());
+      geoCoordinateRespository.save(warehouseEntity.getLocationCoordinates());
+      warehouseRepository.save(warehouseEntity);
       return true;
     }
 }

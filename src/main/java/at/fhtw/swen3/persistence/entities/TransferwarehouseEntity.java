@@ -23,22 +23,4 @@ public class TransferwarehouseEntity extends HopEntity{
     @Column
     private String logisticsPartnerUrl;
 
-    @Column
-    private String hopType;
-
-    @Column
-    private String code;
-
-    @Column
-    private String description;
-
-    @Column
-    private Integer processingDelayMins;
-
-    @Column
-    private String locationName;
-
-    @OneToOne
-    private GeoCoordinateEntity locationCoordinates;
-
 }
