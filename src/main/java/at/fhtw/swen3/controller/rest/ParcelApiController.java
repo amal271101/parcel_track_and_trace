@@ -1,6 +1,5 @@
 package at.fhtw.swen3.controller.rest;
 import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
-import at.fhtw.swen3.persistence.entities.NewParcelInfoEntity;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.controller.ParcelApi;
 import at.fhtw.swen3.services.ParcelService;
@@ -97,7 +96,7 @@ public class ParcelApiController implements ParcelApi {
     public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel) {
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.ParcelDtoToEntity(parcel);
 
-        NewParcelInfo newParcelInfo = NewParcelInfoMapper.INSTANCE.entityToDto(parcelService.createParcel(parcelEntity));
+        NewParcelInfo newParcelInfo = NewParcelInfoMapper.INSTANCE.entityToDto(parcelService.submitParcel(parcelEntity));
 
         if(newParcelInfo!=null){
             return new ResponseEntity<>(newParcelInfo,HttpStatus.CREATED);
@@ -107,35 +106,24 @@ public class ParcelApiController implements ParcelApi {
 
     public ResponseEntity<TrackingInformation> trackParcel(String trackingId
     ) {
-        if(parcelService.getParcelTrackInformation(trackingId)==null){
+        if(parcelService.getParcelTrackingInformation(trackingId)==null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         }
-        return new ResponseEntity<>(TrackingInformationMapper.INSTANCE.entityToDto(parcelService.getParcelTrackInformation(trackingId)), HttpStatus.OK);
+        return new ResponseEntity<>(TrackingInformationMapper.INSTANCE.entityToDto(parcelService.getParcelTrackingInformation(trackingId)), HttpStatus.OK);
 
     }
 
 
     public ResponseEntity<NewParcelInfo> transitionParcel(String trackingId, Parcel parcel) {
-       /* ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
+        ParcelEntity parcelEntity = ParcelMapper.INSTANCE.ParcelDtoToEntity(parcel);
 
+        NewParcelInfo newParcelInfo = NewParcelInfoMapper.INSTANCE.entityToDto(parcelService.transferParcel(trackingId,parcelEntity));
 
-        NewParcelInfo newParcelInfodto = new NewParcelInfo();
-        newParcelInfodto.setTrackingId(trackingId);
-        ParcelEntity parcelEntity = ParcelMapper.INSTANCE.ParcelNewParcelinfoDtoToEntity(parcel, newParcelInfodto);
-
-
-        Set<ConstraintViolation<ParcelEntity>> violations = validator.validate(parcelEntity);
-        if (violations.size() != 0) {
-            for (ConstraintViolation<ParcelEntity> violation : violations) {
-                log.error(violation.getMessage());
-            }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }*/
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
-
+        if(newParcelInfo!=null){
+            return new ResponseEntity<>(newParcelInfo,HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
 }

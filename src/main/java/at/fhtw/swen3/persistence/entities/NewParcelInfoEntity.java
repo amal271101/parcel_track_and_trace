@@ -10,9 +10,7 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 @Entity
-@Table(name = "newParcelinfo")
 public class NewParcelInfoEntity {
-    @Column
     @NotNull
     @Pattern(regexp = "^[A-Z0-9]{9}$")
     private String trackingId;

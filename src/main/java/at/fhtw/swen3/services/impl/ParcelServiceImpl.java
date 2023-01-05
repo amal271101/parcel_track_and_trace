@@ -37,15 +37,10 @@ public class ParcelServiceImpl implements ParcelService {
         return generator.generate(9);
     }
 
-   @Override
-   public void createParcelDelivery() {
 
-   }
 
-   @Override
-   public void createParcelHop() {
 
-   }
+
 
    public void predictFuturehops(){
 
@@ -60,40 +55,47 @@ public class ParcelServiceImpl implements ParcelService {
     }*/
 
     @Override
-   public NewParcelInfoEntity createParcel(ParcelEntity parcelEntity) {
+   public NewParcelInfoEntity submitParcel(ParcelEntity parcelEntity) {
 
       parcelEntity.setTrackingId(generateTrackingId());
-      HopArrivalEntity hop = new HopArrivalEntity();
-      hop.setDateTime(OffsetDateTime.now());
-      hop.setCode("ABAB790");
-      List<HopArrivalEntity> visitedHops = new ArrayList<>();
+        NewParcelInfoEntity newParcelInfoEntity = saveParcelnReturnNewParcelInfo(parcelEntity);
 
-      visitedHops.add(hop);
-      log.info(String.valueOf(visitedHops.get(0).getDateTime()));
-      predictFuturehops();
-      parcelEntity.setFutureHops(visitedHops);
-        parcelEntity.setVisitedHops(visitedHops);
-     parcelEntity.setState(TrackingInformationEntity.StateEnumEntity.PICKUP);
-
-     /* if(!myValidator.validate(parcelEntity)){
-         return  new NewParcelInfoEntity();
-      }*/
-
-      recipientRepository.save(parcelEntity.getRecipient());
-      recipientRepository.save(parcelEntity.getSender());
-     // trackingInformationRepository.save(parcelEntity.g);
-    parcelRepository.save(parcelEntity);
-
-
-      NewParcelInfoEntity newParcelInfoEntity = new NewParcelInfoEntity();
-
-      newParcelInfoEntity.setTrackingId(generateTrackingId());
-
-       // getNearestHop(parcelEntity.getRecipient());
-       // System.out.println("LOCATION: "+getNearestHop(parcelEntity.getSender()).getLocationCoordinates());
-
+        newParcelInfoEntity.setTrackingId(parcelEntity.getTrackingId());
         return newParcelInfoEntity;
    }
+
+    @Override
+    public NewParcelInfoEntity transferParcel(String trackingId, ParcelEntity parcelEntity) {
+        parcelEntity.setTrackingId(trackingId);
+        NewParcelInfoEntity newParcelInfoEntity = saveParcelnReturnNewParcelInfo(parcelEntity);
+        newParcelInfoEntity.setTrackingId(trackingId);
+        return newParcelInfoEntity;
+    }
+
+    private NewParcelInfoEntity saveParcelnReturnNewParcelInfo(ParcelEntity parcelEntity) {
+        HopArrivalEntity hop = new HopArrivalEntity();
+        hop.setDateTime(OffsetDateTime.now());
+        hop.setCode("ABAB790");
+        List<HopArrivalEntity> visitedHops = new ArrayList<>();
+
+        visitedHops.add(hop);
+        log.info(String.valueOf(visitedHops.get(0).getDateTime()));
+        parcelEntity.setFutureHops(visitedHops);
+        parcelEntity.setVisitedHops(visitedHops);
+        parcelEntity.setState(TrackingInformationEntity.StateEnumEntity.PICKUP);
+
+         /* if(!myValidator.validate(parcelEntity)){
+             return  new NewParcelInfoEntity();
+          }*/
+
+        /** PREDICT FUTURE HOPS HIER UND DAS OBERE ALLES LÖSCHEN**/
+        predictFuturehops();
+        recipientRepository.save(parcelEntity.getRecipient());
+        recipientRepository.save(parcelEntity.getSender());
+        parcelRepository.save(parcelEntity);
+        NewParcelInfoEntity newParcelInfoEntity = new NewParcelInfoEntity();
+        return newParcelInfoEntity;
+    }
 
     @Override
     public void reportParcelDelivery(String trackingId) {
@@ -106,7 +108,7 @@ public class ParcelServiceImpl implements ParcelService {
 
 
     @Override
-   public TrackingInformationEntity getParcelTrackInformation(String trackingId) {
+   public TrackingInformationEntity getParcelTrackingInformation(String trackingId) {
         NewParcelInfoEntity newParcelInfoEntity = new NewParcelInfoEntity();
         newParcelInfoEntity.setTrackingId(trackingId);
         ParcelEntity parcelEntity;
@@ -122,8 +124,5 @@ public class ParcelServiceImpl implements ParcelService {
         return trackingInformationEntity;
     }
 
-   @Override
-   public void updateParcel() {
 
-   }
 }

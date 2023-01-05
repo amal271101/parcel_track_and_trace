@@ -5,14 +5,13 @@ import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.persistence.entities.TrackingInformationEntity;
 
 public interface ParcelService {
-     void createParcelDelivery();
 
-     void createParcelHop();
 
-    NewParcelInfoEntity createParcel(ParcelEntity parcelEntity);
+    NewParcelInfoEntity submitParcel(ParcelEntity parcelEntity);
 
    void reportParcelDelivery(String trackingId);
-  TrackingInformationEntity getParcelTrackInformation(String trackinginfo) ;
+  TrackingInformationEntity getParcelTrackingInformation(String trackinginfo) ;
 
-    void updateParcel();
+
+    NewParcelInfoEntity transferParcel(String trackingId, ParcelEntity parcelEntity);
 }
