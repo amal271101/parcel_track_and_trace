@@ -5,6 +5,7 @@ import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
 import at.fhtw.swen3.persistence.entities.RecipientEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.stereotype.Service;
 
 
 import java.net.URI;
@@ -12,7 +13,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
-
+@Service
 public class GeoEncodingServiceImpl implements GeoEncodingService {
     private GeoCoordinateEntity geoCoordinateEntity=new GeoCoordinateEntity();
 
@@ -39,8 +40,6 @@ public class GeoEncodingServiceImpl implements GeoEncodingService {
 
                 })
                 .join();
-
-
         return geoCoordinateEntity;
     }
 }

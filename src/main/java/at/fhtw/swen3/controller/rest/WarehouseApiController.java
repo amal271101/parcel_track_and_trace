@@ -1,17 +1,12 @@
 package at.fhtw.swen3.controller.rest;
-
-
-import at.fhtw.swen3.persistence.entities.HopEntity;
+import at.fhtw.swen3.persistence.entities.TransferwarehouseEntity;
 import at.fhtw.swen3.persistence.entities.TruckEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.controller.WarehouseApi;
+import at.fhtw.swen3.persistence.repositories.TruckRepository;
 import at.fhtw.swen3.services.WarehouseService;
-import at.fhtw.swen3.services.dto.Hop;
-import at.fhtw.swen3.services.dto.Warehouse;
-import at.fhtw.swen3.services.dto.WarehouseNextHops;
-import at.fhtw.swen3.services.mapper.HopMapper;
-import at.fhtw.swen3.services.mapper.HopMapperDecorator;
-import at.fhtw.swen3.services.mapper.WarehouseMapper;
+import at.fhtw.swen3.services.dto.*;
+import at.fhtw.swen3.services.mapper.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,31 +15,28 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import javax.annotation.Generated;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+
 
 @RequestMapping("${openapi.parcelLogisticsService.base-path:}")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-09-24T11:01:08.846404Z[Etc/UTC]")
 @Controller
 @Slf4j
 public class WarehouseApiController implements WarehouseApi {
+    private final TruckRepository truckRepository;
 
     private WarehouseService warehouseService;
 
     private final NativeWebRequest request;
 
     @Autowired
-    public WarehouseApiController(NativeWebRequest request, WarehouseService warehouseService) {
+    public WarehouseApiController(NativeWebRequest request, WarehouseService warehouseService,
+                                  TruckRepository truckRepository) {
 
         this.request = request;
         this.warehouseService=warehouseService;
+        this.truckRepository = truckRepository;
     }
 
     @Override
@@ -53,7 +45,7 @@ public class WarehouseApiController implements WarehouseApi {
     }
 
     public ResponseEntity<Warehouse> exportWarehouses() {
-        Warehouse warehouse =new Warehouse();
+       /* Warehouse warehouse =new Warehouse();
         warehouse.setLevel(4);
         warehouse.setHopType("Uno");
         warehouse.setCode("Hello World");
@@ -79,14 +71,75 @@ public class WarehouseApiController implements WarehouseApi {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-        }
+        }*/
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        Warehouse warehouse= WarehouseMapper.INSTANCE.entityToDto(warehouseService.exportWarehouses());
+        return new ResponseEntity<>(warehouse,HttpStatus.OK);
     }
 
     public ResponseEntity<Hop> getWarehouse(String code
     ) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+       Object hop= warehouseService.getWarehousebyCode(code);
+
+     /*  if(hop.get().getClass()==WarehouseEntity.class){
+           Warehouse warehouse = WarehouseMapper.INSTANCE.entityToDto((WarehouseEntity) hop.get());
+           return new ResponseEntity<>(warehouse,HttpStatus.CREATED);
+
+       }*/
+
+
+        /*
+        *    if (hop.get() instanceof WarehouseEntity) {
+            Warehouse warehouse = WarehouseMapper.INSTANCE.entityToDto((WarehouseEntity) hop.get());
+            return new ResponseEntity<>(warehouse,HttpStatus.CREATED);
+        } else if (hop.get() instanceof TruckEntity) {
+            Truck truck = TruckMapper.INSTANCE.entityToDto((TruckEntity) hop.get());
+            return new ResponseEntity<>(truck,HttpStatus.CREATED);
+        } else if (hop.get() instanceof TransferwarehouseEntity) {
+            Transferwarehouse transferwarehouse = TransferwarehouseMapper.INSTANCE.entityToDto((TransferwarehouseEntity) hop.get());
+            return new ResponseEntity<>(transferwarehouse,HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+*/
+
+
+        /** TO DO: VALIDATION**/
+        if (hop.getClass()== WarehouseEntity.class) {
+            Warehouse warehouse = WarehouseMapper.INSTANCE.entityToDto((WarehouseEntity) hop);
+            return new ResponseEntity<>(warehouse,HttpStatus.CREATED);
+        } else if (hop.getClass()== TruckEntity.class) {
+            Truck truck = TruckMapper.INSTANCE.entityToDto((TruckEntity) hop);
+            return new ResponseEntity<>(truck,HttpStatus.CREATED);
+        } else if (hop.getClass()==TransferwarehouseEntity.class) {
+            Transferwarehouse transferwarehouse = TransferwarehouseMapper.INSTANCE.entityToDto((TransferwarehouseEntity) hop);
+            return new ResponseEntity<>(transferwarehouse,HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
+       /* switch (hop.get().getClass()){
+           case WarehouseEntity.class:
+               Warehouse warehouse = WarehouseMapper.INSTANCE.entityToDto((WarehouseEntity) hop.get());
+               return new ResponseEntity<>(warehouse,HttpStatus.CREATED);
+
+           case TruckEntity.class :
+                Truck truck = TruckMapper.INSTANCE.entityToDto((TruckEntity) hop.get());
+               return new ResponseEntity<>(truck,HttpStatus.CREATED);
+           case TransferwarehouseEntity.class:
+               Transferwarehouse transferwarehouse = TransferwarehouseMapper.INSTANCE.entityToDto((TransferwarehouseEntity) hop.get());
+               return new ResponseEntity<>(transferwarehouse,HttpStatus.CREATED);
+
+
+
+       }*_/
+
+
+
+
+
+      /*  ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
         Warehouse warehouse =new Warehouse();
@@ -100,8 +153,7 @@ public class WarehouseApiController implements WarehouseApi {
             }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        return new ResponseEntity<>(HttpStatus.OK);
+*/
     }
 
 

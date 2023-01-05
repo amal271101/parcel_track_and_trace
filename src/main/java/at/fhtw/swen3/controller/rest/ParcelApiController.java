@@ -8,6 +8,7 @@ import at.fhtw.swen3.services.dto.*;
 import at.fhtw.swen3.services.mapper.HopArrivalMapper;
 import at.fhtw.swen3.services.mapper.NewParcelInfoMapper;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
+import at.fhtw.swen3.services.mapper.TrackingInformationMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,23 +46,9 @@ public class ParcelApiController implements ParcelApi {
 
     @Override
     public ResponseEntity<Void> reportParcelDelivery(String trackingId) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
 
-        NewParcelInfo newParcelInfodto = new NewParcelInfo();
-        newParcelInfodto.setTrackingId(trackingId);
-
-        NewParcelInfoEntity newParcelInfoEntity = NewParcelInfoMapper.INSTANCE.dtoToEntity(newParcelInfodto);
-
-        Set<ConstraintViolation<NewParcelInfoEntity>> violations = validator.validate(newParcelInfoEntity);
-        if (violations.size() != 0) {
-            for (ConstraintViolation<NewParcelInfoEntity> violation : violations) {
-                log.error(violation.getMessage());
-
-            }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        parcelService.reportParcelDelivery(trackingId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public ResponseEntity<Void> reportParcelHop(String trackingId, String code) {
@@ -120,28 +107,17 @@ public class ParcelApiController implements ParcelApi {
 
     public ResponseEntity<TrackingInformation> trackParcel(String trackingId
     ) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
-        NewParcelInfo newParcelInfodto = new NewParcelInfo();
-        newParcelInfodto.setTrackingId(trackingId);
-
-        NewParcelInfoEntity newParcelInfoEntity = NewParcelInfoMapper.INSTANCE.dtoToEntity(newParcelInfodto);
-
-        Set<ConstraintViolation<NewParcelInfoEntity>> violations = validator.validate(newParcelInfoEntity);
-        if (violations.size() != 0) {
-            for (ConstraintViolation<NewParcelInfoEntity> violation : violations) {
-                log.error(violation.getMessage());
-
-            }
+        if(parcelService.getParcelTrackInformation(trackingId)==null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         }
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(TrackingInformationMapper.INSTANCE.entityToDto(parcelService.getParcelTrackInformation(trackingId)), HttpStatus.OK);
+
     }
 
 
     public ResponseEntity<NewParcelInfo> transitionParcel(String trackingId, Parcel parcel) {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+       /* ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
 
 
@@ -156,7 +132,7 @@ public class ParcelApiController implements ParcelApi {
                 log.error(violation.getMessage());
             }
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        }*/
 
         return new ResponseEntity<>(HttpStatus.CREATED);
 

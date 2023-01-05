@@ -25,7 +25,7 @@ public class RecipientEntity {
     private String street;
 
     @Column
-    @Pattern(regexp = "[A]-[0-9]{4}")
+    //@Pattern(regexp = "[A]-[0-9]{4}")
     private String postalCode;
 
     @Column

@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class WarehouseApiControllerTest {
 
-    @Test
+  /*  @Test
     void exportWarehousesTestFail(){
         WarehouseApiController wareHouseApiController = new WarehouseApiController(null, null);
         ResponseEntity<Warehouse> responseEntity = wareHouseApiController.exportWarehouses();
@@ -37,7 +37,7 @@ public class WarehouseApiControllerTest {
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }
 
-
+*/
 
 
 

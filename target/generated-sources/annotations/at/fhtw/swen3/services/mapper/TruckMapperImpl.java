@@ -5,10 +5,11 @@ import at.fhtw.swen3.persistence.entities.TruckEntity;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
 import at.fhtw.swen3.services.dto.Truck;
 import javax.annotation.processing.Generated;
+import org.locationtech.jts.io.ParseException;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-12-29T14:56:36+0100",
+    date = "2023-01-05T01:30:24+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 public class TruckMapperImpl implements TruckMapper {
@@ -21,13 +22,13 @@ public class TruckMapperImpl implements TruckMapper {
 
         Truck truck = new Truck();
 
+        truck.setRegionGeoJson( convertGeometryObjectToString( truckEntityEntity.getRegionGeoJson() ) );
         truck.hopType( truckEntityEntity.getHopType() );
         truck.code( truckEntityEntity.getCode() );
         truck.description( truckEntityEntity.getDescription() );
         truck.processingDelayMins( truckEntityEntity.getProcessingDelayMins() );
         truck.locationName( truckEntityEntity.getLocationName() );
         truck.locationCoordinates( geoCoordinateEntityToGeoCoordinate( truckEntityEntity.getLocationCoordinates() ) );
-        truck.setRegionGeoJson( truckEntityEntity.getRegionGeoJson() );
         truck.setNumberPlate( truckEntityEntity.getNumberPlate() );
 
         return truck;
@@ -41,13 +42,18 @@ public class TruckMapperImpl implements TruckMapper {
 
         TruckEntity truckEntity = new TruckEntity();
 
+        try {
+            truckEntity.setRegionGeoJson( convertStringToGeometryObject( truck.getRegionGeoJson() ) );
+        }
+        catch ( ParseException e ) {
+            throw new RuntimeException( e );
+        }
         truckEntity.setCode( truck.getCode() );
         truckEntity.setHopType( truck.getHopType() );
         truckEntity.setDescription( truck.getDescription() );
         truckEntity.setProcessingDelayMins( truck.getProcessingDelayMins() );
         truckEntity.setLocationName( truck.getLocationName() );
         truckEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( truck.getLocationCoordinates() ) );
-        truckEntity.setRegionGeoJson( truck.getRegionGeoJson() );
         truckEntity.setNumberPlate( truck.getNumberPlate() );
 
         return truckEntity;

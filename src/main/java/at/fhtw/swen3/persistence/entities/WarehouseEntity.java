@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.*;
 import java.util.List;
 
@@ -18,11 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class WarehouseEntity extends HopEntity{
-    @Column
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
     @Column
     private Integer level;
 

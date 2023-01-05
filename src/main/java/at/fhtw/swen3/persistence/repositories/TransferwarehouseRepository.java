@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TransferwarehouseRepository extends JpaRepository<TransferwarehouseEntity,Integer> {
+ TransferwarehouseEntity findByCode(String code);
+
 }

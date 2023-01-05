@@ -5,10 +5,11 @@ import at.fhtw.swen3.persistence.entities.TransferwarehouseEntity;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
 import at.fhtw.swen3.services.dto.Transferwarehouse;
 import javax.annotation.processing.Generated;
+import org.locationtech.jts.io.ParseException;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-12-29T14:56:36+0100",
+    date = "2023-01-05T01:30:24+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 public class TransferwarehouseMapperImpl implements TransferwarehouseMapper {
@@ -21,13 +22,13 @@ public class TransferwarehouseMapperImpl implements TransferwarehouseMapper {
 
         Transferwarehouse transferwarehouse = new Transferwarehouse();
 
+        transferwarehouse.setRegionGeoJson( convertGeometryObjectToString( transferwarehouseEntity.getRegionGeoJson() ) );
         transferwarehouse.hopType( transferwarehouseEntity.getHopType() );
         transferwarehouse.code( transferwarehouseEntity.getCode() );
         transferwarehouse.description( transferwarehouseEntity.getDescription() );
         transferwarehouse.processingDelayMins( transferwarehouseEntity.getProcessingDelayMins() );
         transferwarehouse.locationName( transferwarehouseEntity.getLocationName() );
         transferwarehouse.locationCoordinates( geoCoordinateEntityToGeoCoordinate( transferwarehouseEntity.getLocationCoordinates() ) );
-        transferwarehouse.setRegionGeoJson( transferwarehouseEntity.getRegionGeoJson() );
         transferwarehouse.setLogisticsPartner( transferwarehouseEntity.getLogisticsPartner() );
         transferwarehouse.setLogisticsPartnerUrl( transferwarehouseEntity.getLogisticsPartnerUrl() );
 
@@ -42,13 +43,18 @@ public class TransferwarehouseMapperImpl implements TransferwarehouseMapper {
 
         TransferwarehouseEntity transferwarehouseEntity = new TransferwarehouseEntity();
 
+        try {
+            transferwarehouseEntity.setRegionGeoJson( convertStringToGeometryObject( transferwarehouse.getRegionGeoJson() ) );
+        }
+        catch ( ParseException e ) {
+            throw new RuntimeException( e );
+        }
         transferwarehouseEntity.setCode( transferwarehouse.getCode() );
         transferwarehouseEntity.setHopType( transferwarehouse.getHopType() );
         transferwarehouseEntity.setDescription( transferwarehouse.getDescription() );
         transferwarehouseEntity.setProcessingDelayMins( transferwarehouse.getProcessingDelayMins() );
         transferwarehouseEntity.setLocationName( transferwarehouse.getLocationName() );
         transferwarehouseEntity.setLocationCoordinates( geoCoordinateToGeoCoordinateEntity( transferwarehouse.getLocationCoordinates() ) );
-        transferwarehouseEntity.setRegionGeoJson( transferwarehouse.getRegionGeoJson() );
         transferwarehouseEntity.setLogisticsPartner( transferwarehouse.getLogisticsPartner() );
         transferwarehouseEntity.setLogisticsPartnerUrl( transferwarehouse.getLogisticsPartnerUrl() );
 

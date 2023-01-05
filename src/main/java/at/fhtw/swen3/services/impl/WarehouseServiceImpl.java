@@ -19,21 +19,30 @@ public class WarehouseServiceImpl implements WarehouseService {
   private final Validator myValidator;
   private final HopRepository hopRepository;
 
-  private final  GeoCoordinateRespository geoCoordinateRespository;
+  private final  GeoCoordinateRespository geoCoordinateRepository;
 
   private final TruckRepository truckRepository;
 
   private final TransferwarehouseRepository transferwarehouseRepository;
 
 
-  @Override
-    public void exportWarehouses() {
 
+  @Override
+    public WarehouseEntity exportWarehouses() {
+    return warehouseRepository.findByLevel(0);
     }
 
     @Override
-    public void getWarehousebyCode() {
-
+    public Object getWarehousebyCode(String code) {
+      if(truckRepository.findByCode(code)!=null) {
+        return truckRepository.findByCode(code);
+      }else if(warehouseRepository.findByCode(code)!=null){
+        return warehouseRepository.findByCode(code);
+      }
+      else if(transferwarehouseRepository.findByCode(code)!=null){
+        return transferwarehouseRepository.findByCode(code);
+      }
+       return null;
     }
 
 
@@ -42,21 +51,20 @@ public class WarehouseServiceImpl implements WarehouseService {
     for (WarehouseNextHopsEntity nextHop : nextHops) {
       switch (nextHop.getHop().getHopType()) {
         case "warehouse":
-          geoCoordinateRespository.save(nextHop.getHop().getLocationCoordinates());
+          geoCoordinateRepository.save(nextHop.getHop().getLocationCoordinates());
           saveNestedWarehouses(((WarehouseEntity) nextHop.getHop()).getNextHops());
           break;
         case "truck":
-          geoCoordinateRespository.save(nextHop.getHop().getLocationCoordinates());
+          geoCoordinateRepository.save(nextHop.getHop().getLocationCoordinates());
           truckRepository.save((TruckEntity) nextHop.getHop());
           break;
         case "transferwarehouse":
-          geoCoordinateRespository.save(nextHop.getHop().getLocationCoordinates());
+          geoCoordinateRepository.save(nextHop.getHop().getLocationCoordinates());
           transferwarehouseRepository.save((TransferwarehouseEntity) nextHop.getHop());
           break;
         default:
       }
-      //hopRepository.save(nextHop.getHop());
-      warehouseNextHopsRepository.save(  nextHop);
+      warehouseNextHopsRepository.save(nextHop);
     }
   }
     @Override
@@ -65,7 +73,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         return false;
       }
       saveNestedWarehouses(warehouseEntity.getNextHops());
-      geoCoordinateRespository.save(warehouseEntity.getLocationCoordinates());
+      geoCoordinateRepository.save(warehouseEntity.getLocationCoordinates());
       warehouseRepository.save(warehouseEntity);
       return true;
     }
