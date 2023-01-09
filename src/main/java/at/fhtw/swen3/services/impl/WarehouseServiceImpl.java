@@ -70,6 +70,9 @@ public class WarehouseServiceImpl implements WarehouseService {
       if (!myValidator.validate(warehouseEntity)) {
         return false;
       }
+      warehouseRepository.deleteAll();
+      transferwarehouseRepository.deleteAll();
+      truckRepository.deleteAll();
       saveNestedWarehouses(warehouseEntity.getNextHops());
       geoCoordinateRepository.save(warehouseEntity.getLocationCoordinates());
       warehouseRepository.save(warehouseEntity);

@@ -81,13 +81,11 @@ public class ParcelServiceImpl implements ParcelService {
     public WarehouseEntity findParent(WarehouseEntity warehouse, HopEntity truck) {
         for (WarehouseNextHopsEntity nextHop : warehouse.getNextHops()) {
             if (nextHop.getHop().equals(truck)) {
-                System.out.println(warehouse.getCode());
                 return warehouse;
             }
             if (nextHop.getHop() instanceof WarehouseEntity) {
                 WarehouseEntity parentWarehouse = findParent((WarehouseEntity) nextHop.getHop(), truck);
                 if (parentWarehouse != null) {
-                    System.out.println(parentWarehouse.getCode());
                     return parentWarehouse;
                 }
 
@@ -118,10 +116,10 @@ public class ParcelServiceImpl implements ParcelService {
         hop.setDateTime(OffsetDateTime.now());
         hop.setCode("ABAB790");
         List<HopArrivalEntity> visitedHops = new ArrayList<>();
+        List<HopArrivalEntity> futureHops = new ArrayList<>();
 
         visitedHops.add(hop);
         log.info(String.valueOf(visitedHops.get(0).getDateTime()));
-        parcelEntity.setFutureHops(visitedHops);
         parcelEntity.setVisitedHops(visitedHops);
         parcelEntity.setState(TrackingInformationEntity.StateEnumEntity.PICKUP);
 
@@ -130,15 +128,26 @@ public class ParcelServiceImpl implements ParcelService {
           }*/
 
         /** PREDICT FUTURE HOPS HIER UND DAS OBERE ALLES LÖSCHEN**/
-        TruckEntity truckEntityA = truckRepository.findByCode("OWTA026");
-        TruckEntity truckEntityB = truckRepository.findByCode("SBTA036");
-      //  TruckEntity truckEntityA= getNearestHop(parcelEntity.getRecipient());
-      //  TruckEntity truckEntityB= getNearestHop(parcelEntity.getSender());
+
+        TruckEntity truckEntityA= getNearestHop(parcelEntity.getRecipient());
+        TruckEntity truckEntityB= getNearestHop(parcelEntity.getSender());
         WarehouseEntity warehouseEntity = warehouseRepository.findByLevel(0);
 
         List<HopEntity> route = calculateRoute(truckEntityA, truckEntityB, warehouseEntity);
+
         System.out.println("route"+Arrays.toString(route.toArray()));
         System.out.println(route.size());
+
+
+        for (HopEntity hopOfRoute: route) {
+            HopArrivalEntity hopArrivalEntity= new HopArrivalEntity();
+            hopArrivalEntity.setCode(hopOfRoute.getCode());
+            hopArrivalEntity.setDescription(hopOfRoute.getDescription());
+            hopArrivalEntity.setDateTime(OffsetDateTime.now());
+            futureHops.add(hopArrivalEntity);
+        }
+        parcelEntity.setFutureHops(futureHops);
+
         recipientRepository.save(parcelEntity.getRecipient());
         recipientRepository.save(parcelEntity.getSender());
         parcelRepository.save(parcelEntity);

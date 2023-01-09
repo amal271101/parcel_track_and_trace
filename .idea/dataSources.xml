@@ -22,5 +22,19 @@
       <jdbc-url>jdbc:postgresql://trackntracedb.c9azrvju5tal.us-east-1.rds.amazonaws.com:5432/postgres</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="trackntracedb@localhost [2]" uuid="84133003-a618-48eb-947e-1e4a5162e79f">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/trackntracedb</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="postgres@trackntracedb.c9azrvju5tal.us-east-1.rds.amazonaws.com [3]" uuid="3dadf1ac-1143-4e70-b421-4b2e6132cdf0">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://trackntracedb.c9azrvju5tal.us-east-1.rds.amazonaws.com:5432/postgres</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
