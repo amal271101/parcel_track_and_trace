@@ -18,6 +18,12 @@ public class WarehouseNextHopsRepositoryTest {
     @Autowired
     HopRepository hopRepository;
 
+    @Autowired
+    TruckRepository truckRepository;
+
+    @Autowired
+    WarehouseRepository warehouseRepository;
+
     @Test
     void saveAndDeleteWarehouseNextHopsEntity() {
         WarehouseNextHopsEntity warehouseNextHopsEntity= new WarehouseNextHopsEntity();
@@ -51,6 +57,16 @@ public class WarehouseNextHopsRepositoryTest {
 
     }
 
+   /* @Test
+    void getWarehouseNextHopsByHopId(){
+
+
+        //Trucks WTTA013 WTTA014
+       WarehouseNextHopsEntity warehouseNextHopsEntity= warehouseNextHopsRepository.findByHop_Id(2710L);
+
+        System.out.println(warehouseRepository.getid(warehouseNextHopsEntity.getId()));
+       assertEquals(warehouseNextHopsEntity.getHop().getCode(),truckRepository.findById(2710L).getCode());
+    }*/
 
 }
 

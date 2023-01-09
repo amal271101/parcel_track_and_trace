@@ -121,7 +121,7 @@ public class ParcelApiController implements ParcelApi {
         NewParcelInfo newParcelInfo = NewParcelInfoMapper.INSTANCE.entityToDto(parcelService.transferParcel(trackingId,parcelEntity));
 
         if(newParcelInfo!=null){
-            return new ResponseEntity<>(newParcelInfo,HttpStatus.CREATED);
+            return new ResponseEntity<>(newParcelInfo,HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }

@@ -45,8 +45,6 @@ public class WarehouseServiceImpl implements WarehouseService {
        return null;
     }
 
-
-
   public void saveNestedWarehouses(List<WarehouseNextHopsEntity> nextHops) {
     for (WarehouseNextHopsEntity nextHop : nextHops) {
       switch (nextHop.getHop().getHopType()) {

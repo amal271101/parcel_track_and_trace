@@ -107,13 +107,13 @@ public class WarehouseApiController implements WarehouseApi {
         /** TO DO: VALIDATION**/
         if (hop.getClass()== WarehouseEntity.class) {
             Warehouse warehouse = WarehouseMapper.INSTANCE.entityToDto((WarehouseEntity) hop);
-            return new ResponseEntity<>(warehouse,HttpStatus.CREATED);
+            return new ResponseEntity<>(warehouse,HttpStatus.OK);
         } else if (hop.getClass()== TruckEntity.class) {
             Truck truck = TruckMapper.INSTANCE.entityToDto((TruckEntity) hop);
-            return new ResponseEntity<>(truck,HttpStatus.CREATED);
+            return new ResponseEntity<>(truck,HttpStatus.OK);
         } else if (hop.getClass()==TransferwarehouseEntity.class) {
             Transferwarehouse transferwarehouse = TransferwarehouseMapper.INSTANCE.entityToDto((TransferwarehouseEntity) hop);
-            return new ResponseEntity<>(transferwarehouse,HttpStatus.CREATED);
+            return new ResponseEntity<>(transferwarehouse,HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

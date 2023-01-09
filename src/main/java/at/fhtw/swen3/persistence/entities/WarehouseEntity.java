@@ -22,7 +22,8 @@ public class WarehouseEntity extends HopEntity{
     @Column
     @NotNull
     @NotEmpty(message = "nextHops cannot be null")
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+
     private List<WarehouseNextHopsEntity> nextHops;
 
 

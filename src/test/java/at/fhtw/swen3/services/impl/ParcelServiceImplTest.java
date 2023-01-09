@@ -1,15 +1,16 @@
 package at.fhtw.swen3.services.impl;
 
-import at.fhtw.swen3.persistence.entities.ParcelEntity;
-import at.fhtw.swen3.persistence.entities.RecipientEntity;
+import at.fhtw.swen3.persistence.entities.TruckEntity;
+import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.persistence.repositories.RecipientRepository;
+import at.fhtw.swen3.persistence.repositories.TruckRepository;
+import at.fhtw.swen3.persistence.repositories.WarehouseRepository;
 import at.fhtw.swen3.services.ParcelService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class ParcelServiceImplTest {
     @Autowired
@@ -20,6 +21,25 @@ public class ParcelServiceImplTest {
 
     @Autowired
     private RecipientRepository recipientRepository;
+
+    @Autowired
+    private WarehouseRepository warehouseRepository;
+
+    @Autowired
+    private TruckRepository truckRepository;
+
+
+
+
+    @Test
+    public void test(){
+        TruckEntity truckEntity = truckRepository.findById(31564);
+        WarehouseEntity warehouseEntity = warehouseRepository.findByLevel(0);
+       // TruckEntity truckEntityB = truckRepository.findByCode("SBTA049");
+       parcelService.findParent(warehouseEntity,truckEntity);
+      //  assertNotNull( parcelService.findParentWarehouse(warehouseEntity,truckEntity));
+
+    }
 
     /*@Test
     public void createParcelTest() {
