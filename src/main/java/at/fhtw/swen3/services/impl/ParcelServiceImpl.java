@@ -127,7 +127,6 @@ public class ParcelServiceImpl implements ParcelService {
              return  new NewParcelInfoEntity();
           }*/
 
-        /** PREDICT FUTURE HOPS HIER UND DAS OBERE ALLES LÖSCHEN**/
 
         TruckEntity truckEntityA= getNearestHop(parcelEntity.getRecipient());
         TruckEntity truckEntityB= getNearestHop(parcelEntity.getSender());
@@ -135,9 +134,10 @@ public class ParcelServiceImpl implements ParcelService {
 
         List<HopEntity> route = calculateRoute(truckEntityA, truckEntityB, warehouseEntity);
 
+        route.add(0,truckEntityA);
+        route.add(truckEntityB);
         System.out.println("route"+Arrays.toString(route.toArray()));
         System.out.println(route.size());
-
 
         for (HopEntity hopOfRoute: route) {
             HopArrivalEntity hopArrivalEntity= new HopArrivalEntity();

@@ -16,7 +16,7 @@ public class AppConfig {
 
     @Bean
     public WarehouseServiceImpl warehouseServiceImpl(WarehouseRepository warehouseRepository, WarehouseNextHopsRepository warehouseNextHopsRepository, Validator validator, HopRepository hopRepository, GeoCoordinateRespository geoCoordinateRespository, TruckRepository truckRepository, TransferwarehouseRepository transferwarehouseRepository) {
-        return new WarehouseServiceImpl(warehouseRepository, warehouseNextHopsRepository, validator, hopRepository,geoCoordinateRespository,truckRepository, transferwarehouseRepository);
+        return new WarehouseServiceImpl(warehouseRepository, warehouseNextHopsRepository, validator,geoCoordinateRespository,truckRepository, transferwarehouseRepository);
     }
 
 
