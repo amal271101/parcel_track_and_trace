@@ -16,10 +16,12 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class GeoEncodingServiceImpl implements GeoEncodingService {
     private GeoCoordinateEntity geoCoordinateEntity=new GeoCoordinateEntity();
-
     @Override
     public GeoCoordinateEntity encodeAddress(RecipientEntity adress) {
-        URI url = URI.create(("https://nominatim.openstreetmap.org/search?addressdetails=1&q="+adress.getStreet()+" "+adress.getCountry()+" "+" "+adress.getCity()+" "+adress.getPostalCode()+"&format=json").replaceAll(" ", "%20"));
+
+        System.out.println("before: " +adress.getPostalCode());
+        System.out.println("after: "+formatPostalCode(adress.getPostalCode()));
+        URI url = URI.create(("https://nominatim.openstreetmap.org/search?addressdetails=1&q="+ formatStreet(adress.getStreet())+" "+adress.getCountry()+" "+" "+adress.getCity()+" "+formatPostalCode(adress.getPostalCode())+"&format=json").replaceAll(" ", "%20"));
         System.out.println(url);
         HttpClient client = HttpClient.newBuilder().build();
         HttpRequest request = HttpRequest.newBuilder(url).GET().build();
@@ -42,4 +44,22 @@ public class GeoEncodingServiceImpl implements GeoEncodingService {
                 .join();
         return geoCoordinateEntity;
     }
+
+
+    public String formatPostalCode(String postalCode){
+        if(postalCode.matches("[A]-[0-9]{4}")){
+            return postalCode.replaceFirst("[A]-", "");
+        }
+        return postalCode;
+    }
+
+    public String formatStreet(String street){
+
+        if (street.contains("-")) {
+           return street.replaceFirst("-.*$", "");
+
+        }
+        return street;
+    }
+
 }

@@ -72,7 +72,6 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public boolean importWarehouses(WarehouseEntity warehouseEntity) {
-        System.out.println("hi");
         if (!myValidator.validate(warehouseEntity)) {
             return false;
         }

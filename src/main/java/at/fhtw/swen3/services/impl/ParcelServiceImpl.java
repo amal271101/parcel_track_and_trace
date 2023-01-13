@@ -13,10 +13,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -31,9 +35,11 @@ public class ParcelServiceImpl implements ParcelService {
 
     private final WarehouseRepository warehouseRepository;
 
+    private final TransferwarehouseRepository transferwarehouseRepository;
+
     private GeoEncodingServiceImpl geoEncodingServiceImpl = new GeoEncodingServiceImpl();
 
-    public String generateTrackingId() {
+    private String generateTrackingId() {
         RandomStringGenerator generator = new RandomStringGenerator.Builder()
                 .withinRange('0', 'Z')
                 .filteredBy(CharacterPredicates.DIGITS, CharacterPredicates.LETTERS)
@@ -42,18 +48,18 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     private TruckEntity getNearestHop(RecipientEntity recipientEntity) {
-        GeoCoordinateEntity geoCoordinateEntity= geoEncodingServiceImpl.encodeAddress(recipientEntity);
+        GeoCoordinateEntity geoCoordinateEntity = geoEncodingServiceImpl.encodeAddress(recipientEntity);
         GeometryFactory geometryFactory = new GeometryFactory();
         Point point = geometryFactory.createPoint(new Coordinate(geoCoordinateEntity.getLon(), geoCoordinateEntity.getLat()));
         System.out.println(point);
-        return truckRepository.findNearestHop(geoCoordinateEntity.getLat(),geoCoordinateEntity.getLon());
+        return truckRepository.findNearestHop(geoCoordinateEntity.getLat(), geoCoordinateEntity.getLon());
     }
 
     public List<HopEntity> calculateRoute(HopEntity hopA, HopEntity hopB, HopEntity warehouse) {
         WarehouseEntity parentHopA = findParent((WarehouseEntity) warehouse, hopA);
         WarehouseEntity parentHopB = findParent((WarehouseEntity) warehouse, hopB);
 
-        List<HopEntity> hops = new ArrayList();
+        List<HopEntity> hops = new ArrayList<>();
 
         WarehouseEntity warehouseEntity = (WarehouseEntity) warehouse;
         for (WarehouseNextHopsEntity nextHop : warehouseEntity.getNextHops()) {
@@ -111,6 +117,73 @@ public class ParcelServiceImpl implements ParcelService {
         return newParcelInfoEntity;
     }
 
+    public TrackingInformationEntity.StateEnumEntity getTrackingState(ParcelEntity parcelEntity, String code) {
+        if (truckRepository.findByCode(code) != null) {
+            return TrackingInformationEntity.StateEnumEntity.INTRANSPORT;
+        } else if (warehouseRepository.findByCode(code) != null) {
+            return TrackingInformationEntity.StateEnumEntity.INTRANSPORT;
+        } else if (transferwarehouseRepository.findByCode(code) != null) {
+            callLogisticsPartnerApi(transferwarehouseRepository.findByCode(code).getLogisticsPartnerUrl(), parcelEntity.getTrackingId());
+            return TrackingInformationEntity.StateEnumEntity.TRANSFERRED;
+        }
+        return null;
+    }
+
+    private void callLogisticsPartnerApi(String partnerUrl, String trackingId) {
+        URI url = URI.create("https://" + partnerUrl + "/parcel/" + trackingId);
+        HttpClient client = HttpClient.newBuilder().build();
+        /**Call logistics partner API - TRANSFER – which has same contract as yours. p
+         ---> POST Request ist leer **/
+        String requestBody = null;
+        HttpRequest request = HttpRequest.newBuilder()
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .uri(url)
+                .setHeader("Content-Type", "application/json")
+                .build();
+
+        CompletableFuture<HttpResponse<String>> future = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+        future
+                .thenApply(HttpResponse::body)
+                .thenAccept((response) -> {
+
+                    System.out.println(response);
+                    System.out.println("logisticsPartnerApiCalled");
+                })
+                .join();
+    }
+
+    @Override
+    public boolean reportParcelHop(String trackingId, String code) {
+        ParcelEntity parcelEntity = parcelRepository.findByTrackingId(trackingId);
+        if (parcelEntity == null) {
+            return false;
+        }
+        List<HopArrivalEntity> futureHops = parcelEntity.getFutureHops();
+        List<HopArrivalEntity> visitedHops = parcelEntity.getVisitedHops();
+
+        HopArrivalEntity hopArrivalEntity = null;
+
+        for (HopArrivalEntity hop : parcelEntity.getFutureHops()) {
+            if (hop.getCode().equals(code)) {
+                hopArrivalEntity = hop;
+            }
+        }
+
+        if (hopArrivalEntity == null) {
+            return false;
+        }
+
+
+        futureHops.remove(hopArrivalEntity);
+        visitedHops.add(hopArrivalEntity);
+        parcelEntity.setFutureHops(futureHops);
+        parcelEntity.setVisitedHops(visitedHops);
+        parcelEntity.setState(getTrackingState(parcelEntity, code));
+        parcelRepository.save(parcelEntity);
+
+        return true;
+    }
+
     private NewParcelInfoEntity saveParcelnReturnNewParcelInfo(ParcelEntity parcelEntity) {
         HopArrivalEntity hop = new HopArrivalEntity();
         hop.setDateTime(OffsetDateTime.now());
@@ -123,24 +196,17 @@ public class ParcelServiceImpl implements ParcelService {
         parcelEntity.setVisitedHops(visitedHops);
         parcelEntity.setState(TrackingInformationEntity.StateEnumEntity.PICKUP);
 
-        /*if(myValidator.validate(parcelEntity)){
-             return  new NewParcelInfoEntity();
-          }*/
-
-
-        TruckEntity truckEntityA= getNearestHop(parcelEntity.getRecipient());
-        TruckEntity truckEntityB= getNearestHop(parcelEntity.getSender());
+        TruckEntity truckEntityA = getNearestHop(parcelEntity.getRecipient());
+        TruckEntity truckEntityB = getNearestHop(parcelEntity.getSender());
         WarehouseEntity warehouseEntity = warehouseRepository.findByLevel(0);
 
         List<HopEntity> route = calculateRoute(truckEntityA, truckEntityB, warehouseEntity);
 
-        route.add(0,truckEntityA);
+        route.add(0, truckEntityA);
         route.add(truckEntityB);
-        System.out.println("route"+Arrays.toString(route.toArray()));
-        System.out.println(route.size());
 
-        for (HopEntity hopOfRoute: route) {
-            HopArrivalEntity hopArrivalEntity= new HopArrivalEntity();
+        for (HopEntity hopOfRoute : route) {
+            HopArrivalEntity hopArrivalEntity = new HopArrivalEntity();
             hopArrivalEntity.setCode(hopOfRoute.getCode());
             hopArrivalEntity.setDescription(hopOfRoute.getDescription());
             hopArrivalEntity.setDateTime(OffsetDateTime.now());
@@ -148,9 +214,12 @@ public class ParcelServiceImpl implements ParcelService {
         }
         parcelEntity.setFutureHops(futureHops);
 
-        recipientRepository.save(parcelEntity.getRecipient());
-        recipientRepository.save(parcelEntity.getSender());
-        parcelRepository.save(parcelEntity);
+
+        if(myValidator.validate(parcelEntity)){
+            recipientRepository.save(parcelEntity.getRecipient());
+            recipientRepository.save(parcelEntity.getSender());
+            parcelRepository.save(parcelEntity);
+        }else { return null;}
         return new NewParcelInfoEntity();
     }
 

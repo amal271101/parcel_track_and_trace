@@ -8,9 +8,10 @@ public interface ParcelService {
 
     NewParcelInfoEntity submitParcel(ParcelEntity parcelEntity);
 
-   void reportParcelDelivery(String trackingId);
-  TrackingInformationEntity getParcelTrackingInformation(String trackinginfo) ;
-
-
+    void reportParcelDelivery(String trackingId);
+    TrackingInformationEntity getParcelTrackingInformation(String trackinginfo) ;
     NewParcelInfoEntity transferParcel(String trackingId, ParcelEntity parcelEntity);
+
+    boolean reportParcelHop(String trackingId, String code);
 }
+

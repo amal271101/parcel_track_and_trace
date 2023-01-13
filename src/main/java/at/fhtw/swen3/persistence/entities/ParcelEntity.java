@@ -36,10 +36,12 @@ public class ParcelEntity {
     @NotNull(message = "state cannot be null")
     private TrackingInformationEntity.StateEnumEntity state;
 
+    @Column
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
     @NotNull(message = "futureHops cannot be null")
     private List<HopArrivalEntity> futureHops;
 
+    @Column
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
     @NotNull(message = "visitedHops cannot be null")
     private List<HopArrivalEntity> visitedHops;

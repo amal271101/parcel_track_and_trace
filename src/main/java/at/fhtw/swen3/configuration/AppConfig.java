@@ -10,12 +10,12 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     @Bean
-    public ParcelServiceImpl parcelServiceImpl(ParcelRepository parcelRepository, RecipientRepository recipientRepository, Validator validator, TruckRepository truckRepository, WarehouseRepository warehouseRepository) {
-        return new ParcelServiceImpl(parcelRepository, recipientRepository, validator, truckRepository, warehouseRepository);
+    public ParcelServiceImpl parcelServiceImpl(ParcelRepository parcelRepository, RecipientRepository recipientRepository, Validator validator, TruckRepository truckRepository, WarehouseRepository warehouseRepository, TransferwarehouseRepository transferwarehouseRepository) {
+        return new ParcelServiceImpl(parcelRepository, recipientRepository, validator, truckRepository, warehouseRepository, transferwarehouseRepository);
     }
 
     @Bean
-    public WarehouseServiceImpl warehouseServiceImpl(WarehouseRepository warehouseRepository, WarehouseNextHopsRepository warehouseNextHopsRepository, Validator validator, HopRepository hopRepository, GeoCoordinateRespository geoCoordinateRespository, TruckRepository truckRepository, TransferwarehouseRepository transferwarehouseRepository) {
+    public WarehouseServiceImpl warehouseServiceImpl(WarehouseRepository warehouseRepository, WarehouseNextHopsRepository warehouseNextHopsRepository, Validator validator, GeoCoordinateRespository geoCoordinateRespository, TruckRepository truckRepository, TransferwarehouseRepository transferwarehouseRepository) {
         return new WarehouseServiceImpl(warehouseRepository, warehouseNextHopsRepository, validator,geoCoordinateRespository,truckRepository, transferwarehouseRepository);
     }
 

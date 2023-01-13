@@ -45,34 +45,6 @@ public class WarehouseApiController implements WarehouseApi {
     }
 
     public ResponseEntity<Warehouse> exportWarehouses() {
-       /* Warehouse warehouse =new Warehouse();
-        warehouse.setLevel(4);
-        warehouse.setHopType("Uno");
-        warehouse.setCode("Hello World");
-
-        Warehouse warehouse2 =new Warehouse();
-        warehouse2.setLevel(4);
-        warehouse2.setHopType("Uno");
-
-        List<Warehouse> list = new ArrayList<>();
-        list.add(warehouse);
-        list.add(warehouse2);
-
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
-       for (Warehouse W : list) {
-          WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.dtoToEntity(W);
-            Set<ConstraintViolation<WarehouseEntity>> violations = validator.validate(warehouseEntity);
-            if (violations.size() != 0) {
-                for (ConstraintViolation<WarehouseEntity> violation : violations) {
-                    log.error(violation.getMessage());
-                }
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-
-        }*/
-
         Warehouse warehouse= WarehouseMapper.INSTANCE.entityToDto(warehouseService.exportWarehouses());
         return new ResponseEntity<>(warehouse,HttpStatus.OK);
     }
@@ -80,30 +52,6 @@ public class WarehouseApiController implements WarehouseApi {
     public ResponseEntity<Hop> getWarehouse(String code
     ) {
        Object hop= warehouseService.getWarehousebyCode(code);
-
-     /*  if(hop.get().getClass()==WarehouseEntity.class){
-           Warehouse warehouse = WarehouseMapper.INSTANCE.entityToDto((WarehouseEntity) hop.get());
-           return new ResponseEntity<>(warehouse,HttpStatus.CREATED);
-
-       }*/
-
-
-        /*
-        *    if (hop.get() instanceof WarehouseEntity) {
-            Warehouse warehouse = WarehouseMapper.INSTANCE.entityToDto((WarehouseEntity) hop.get());
-            return new ResponseEntity<>(warehouse,HttpStatus.CREATED);
-        } else if (hop.get() instanceof TruckEntity) {
-            Truck truck = TruckMapper.INSTANCE.entityToDto((TruckEntity) hop.get());
-            return new ResponseEntity<>(truck,HttpStatus.CREATED);
-        } else if (hop.get() instanceof TransferwarehouseEntity) {
-            Transferwarehouse transferwarehouse = TransferwarehouseMapper.INSTANCE.entityToDto((TransferwarehouseEntity) hop.get());
-            return new ResponseEntity<>(transferwarehouse,HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-*/
-
-
         /** TO DO: VALIDATION**/
         if (hop.getClass()== WarehouseEntity.class) {
             Warehouse warehouse = WarehouseMapper.INSTANCE.entityToDto((WarehouseEntity) hop);
@@ -118,52 +66,12 @@ public class WarehouseApiController implements WarehouseApi {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-
-       /* switch (hop.get().getClass()){
-           case WarehouseEntity.class:
-               Warehouse warehouse = WarehouseMapper.INSTANCE.entityToDto((WarehouseEntity) hop.get());
-               return new ResponseEntity<>(warehouse,HttpStatus.CREATED);
-
-           case TruckEntity.class :
-                Truck truck = TruckMapper.INSTANCE.entityToDto((TruckEntity) hop.get());
-               return new ResponseEntity<>(truck,HttpStatus.CREATED);
-           case TransferwarehouseEntity.class:
-               Transferwarehouse transferwarehouse = TransferwarehouseMapper.INSTANCE.entityToDto((TransferwarehouseEntity) hop.get());
-               return new ResponseEntity<>(transferwarehouse,HttpStatus.CREATED);
-
-
-
-       }*_/
-
-
-
-
-
-      /*  ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
-        Warehouse warehouse =new Warehouse();
-        warehouse.setCode(code);
-
-        WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.dtoToEntity(warehouse);
-        Set<ConstraintViolation<WarehouseEntity>> violations = validator.validate(warehouseEntity);
-        if (violations.size() != 0) {
-            for (ConstraintViolation<WarehouseEntity> violation : violations) {
-                log.error(violation.getMessage());
-            }
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-*/
     }
 
 
     public ResponseEntity<Void> importWarehouses(Warehouse warehouse) {
         WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.dtoToEntity(warehouse);
-
-       if(warehouseService.importWarehouses(warehouseEntity)){
-            return new ResponseEntity<>(HttpStatus.OK);
-
-        }
+       if(warehouseService.importWarehouses(warehouseEntity)){return new ResponseEntity<>(HttpStatus.OK);}
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
