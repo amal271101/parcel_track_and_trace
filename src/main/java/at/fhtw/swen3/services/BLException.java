@@ -9,12 +9,11 @@ public class BLException extends Exception {
 
     private ErrorEntity errorEntity;
 
-    public BLException() {
-    }
-
-    public BLException(Long errorId,Exception innerException, String errorMessage) {
+    public BLException(Exception innerException, String errorMessage) {
         this.innerException = innerException;
-        this.errorEntity= new ErrorEntity(errorId,errorMessage);
+        this.errorEntity= new ErrorEntity();
+        this.errorEntity.setErrorMessage(errorMessage);
+
     }
 
     @Override
@@ -22,6 +21,6 @@ public class BLException extends Exception {
         return errorEntity.getErrorMessage();
     }
 
-
-
 }
+
+

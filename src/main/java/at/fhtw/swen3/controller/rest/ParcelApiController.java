@@ -1,8 +1,12 @@
 package at.fhtw.swen3.controller.rest;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.controller.ParcelApi;
+import at.fhtw.swen3.services.BLDataNotFoundException;
+import at.fhtw.swen3.services.BLException;
+import at.fhtw.swen3.services.BLValidationException;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.dto.*;
+import at.fhtw.swen3.services.dto.Error;
 import at.fhtw.swen3.services.mapper.NewParcelInfoMapper;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import at.fhtw.swen3.services.mapper.TrackingInformationMapper;
@@ -36,44 +40,90 @@ public class ParcelApiController implements ParcelApi {
     }
 
     @Override
-    public ResponseEntity<Void> reportParcelDelivery(String trackingId) {
+    public ResponseEntity<?> reportParcelDelivery(String trackingId) {
+        try {
+            parcelService.reportParcelDelivery(trackingId);
 
-        parcelService.reportParcelDelivery(trackingId);
+        } catch (BLException e) {
+            log.error(e.getMessage());
+            Error error=new Error();
+            error.setErrorMessage(e.getMessage());
+            if(e instanceof BLDataNotFoundException){return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);}
+            return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<Void> reportParcelHop(String trackingId, String code) {
-        if(!parcelService.reportParcelHop(trackingId,code)){ return new ResponseEntity<>(HttpStatus.BAD_REQUEST);}
+    public ResponseEntity<?> reportParcelHop(String trackingId, String code) {
+        try {
+            parcelService.reportParcelHop(trackingId,code);
+        } catch (BLException e) {
+            Error error = new Error();
+            error.setErrorMessage(e.getMessage());
+            if(e instanceof BLDataNotFoundException){return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);}
+            return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
-    public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel) {
-        ParcelEntity parcelEntity = ParcelMapper.INSTANCE.ParcelDtoToEntity(parcel);
+    public ResponseEntity<?> submitParcel(Parcel parcel) {
+        ParcelEntity parcelEntity = new ParcelEntity();
+        try {
+           parcelEntity = ParcelMapper.INSTANCE.ParcelDtoToEntity(parcel);
 
-        NewParcelInfo newParcelInfo = NewParcelInfoMapper.INSTANCE.entityToDto(parcelService.submitParcel(parcelEntity));
+        }catch (Exception e){
+            log.error(e.getMessage());
+            Error error = new Error();
+            error.setErrorMessage(e.getMessage());
+            return new ResponseEntity<Error>(error,HttpStatus.BAD_REQUEST);
+        }
 
+        NewParcelInfo newParcelInfo = null;
+        try {
+            newParcelInfo = NewParcelInfoMapper.INSTANCE.entityToDto(parcelService.submitParcel(parcelEntity));
+        } catch (BLException e) {
+            Error error = new Error();
+            error.setErrorMessage(e.getMessage());
+
+            if(e.getErrorEntity().getErrorMessage().equals("The address of sender or receiver was not found.")){
+                return new ResponseEntity<Error>(error,HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<Error>(error,HttpStatus.BAD_REQUEST);
+        }
         if(newParcelInfo!=null){
-            return new ResponseEntity<>(newParcelInfo,HttpStatus.CREATED);
+            return new ResponseEntity<NewParcelInfo>(newParcelInfo,HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<TrackingInformation> trackParcel(String trackingId
-    ) {
-        if(parcelService.getParcelTrackingInformation(trackingId)==null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
+    public ResponseEntity<?> trackParcel(String trackingId) {
+        TrackingInformation trackingInformation= null;
+        try {
+            trackingInformation = TrackingInformationMapper.INSTANCE.entityToDto(parcelService.getParcelTrackingInformation(trackingId));
+        } catch (BLException e) {
+            log.error(e.getMessage());
+            Error error=new Error();
+            error.setErrorMessage(e.getMessage());
+            if(e instanceof BLDataNotFoundException){return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);}
+            return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(TrackingInformationMapper.INSTANCE.entityToDto(parcelService.getParcelTrackingInformation(trackingId)), HttpStatus.OK);
-
+        return new ResponseEntity<>(trackingInformation,HttpStatus.OK);
     }
 
-
-    public ResponseEntity<NewParcelInfo> transitionParcel(String trackingId, Parcel parcel) {
+    public ResponseEntity<?> transitionParcel(String trackingId, Parcel parcel) {
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.ParcelDtoToEntity(parcel);
 
-        NewParcelInfo newParcelInfo = NewParcelInfoMapper.INSTANCE.entityToDto(parcelService.transferParcel(trackingId,parcelEntity));
+        NewParcelInfo newParcelInfo = null;
+        try {
+            newParcelInfo = NewParcelInfoMapper.INSTANCE.entityToDto(parcelService.transferParcel(trackingId,parcelEntity));
+        } catch (BLException e) {
+            Error error = new Error();
+            error.setErrorMessage(e.getMessage());
+            if (e.getMessage().equals("A parcel with the specified trackingID is already in the system.")){
+                return new ResponseEntity<>(error,HttpStatus.CONFLICT);
+            }
+            return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
+        }
 
         if(newParcelInfo!=null){
             return new ResponseEntity<>(newParcelInfo,HttpStatus.OK);

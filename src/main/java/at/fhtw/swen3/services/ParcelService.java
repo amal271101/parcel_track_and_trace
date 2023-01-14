@@ -6,12 +6,12 @@ public interface ParcelService {
 
     WarehouseEntity findParent(WarehouseEntity warehouse, HopEntity truck);
 
-    NewParcelInfoEntity submitParcel(ParcelEntity parcelEntity);
+    NewParcelInfoEntity submitParcel(ParcelEntity parcelEntity) throws BLException;
 
-    void reportParcelDelivery(String trackingId);
-    TrackingInformationEntity getParcelTrackingInformation(String trackinginfo) ;
-    NewParcelInfoEntity transferParcel(String trackingId, ParcelEntity parcelEntity);
+    void reportParcelDelivery(String trackingId) throws BLException;
+    TrackingInformationEntity getParcelTrackingInformation(String trackinginfo) throws BLDataNotFoundException, BLException;
+    NewParcelInfoEntity transferParcel(String trackingId, ParcelEntity parcelEntity) throws BLException;
 
-    boolean reportParcelHop(String trackingId, String code);
+    void reportParcelHop(String trackingId, String code) throws BLException;
 }
 

@@ -1,6 +1,5 @@
 package at.fhtw.swen3.persistence.repositories;
 
-import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -19,12 +18,4 @@ public interface ParcelRepository extends JpaRepository<ParcelEntity, Long> {
     @Modifying
     @Query(value = "UPDATE parcel  SET state = 4 WHERE tracking_id = :trackingid",nativeQuery = true)
     void setStateToDelivered(@Param("trackingid") String trackingID);
-
-
-
-
-    @Query(value = "SELECT *\n" +
-            "            FROM parcel_future_hops\n" +
-            "            WHERE parcel_entity_id in(SELECT id from parcel WHERE tracking_id= :trackingid)",nativeQuery = true)
-    List<HopArrivalEntity> getHops(@Param("trackingid") String trackingId);
 }

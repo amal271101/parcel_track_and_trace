@@ -1,11 +1,15 @@
 package at.fhtw.swen3.controller.rest;
+
 import at.fhtw.swen3.persistence.entities.TransferwarehouseEntity;
 import at.fhtw.swen3.persistence.entities.TruckEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.controller.WarehouseApi;
 import at.fhtw.swen3.persistence.repositories.TruckRepository;
+import at.fhtw.swen3.services.BLDataNotFoundException;
+import at.fhtw.swen3.services.BLException;
 import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.dto.*;
+import at.fhtw.swen3.services.dto.Error;
 import at.fhtw.swen3.services.mapper.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,11 +35,10 @@ public class WarehouseApiController implements WarehouseApi {
     private final NativeWebRequest request;
 
     @Autowired
-    public WarehouseApiController(NativeWebRequest request, WarehouseService warehouseService,
-                                  TruckRepository truckRepository) {
+    public WarehouseApiController(NativeWebRequest request, WarehouseService warehouseService, TruckRepository truckRepository) {
 
         this.request = request;
-        this.warehouseService=warehouseService;
+        this.warehouseService = warehouseService;
         this.truckRepository = truckRepository;
     }
 
@@ -44,34 +47,68 @@ public class WarehouseApiController implements WarehouseApi {
         return Optional.ofNullable(request);
     }
 
-    public ResponseEntity<Warehouse> exportWarehouses() {
-        Warehouse warehouse= WarehouseMapper.INSTANCE.entityToDto(warehouseService.exportWarehouses());
-        return new ResponseEntity<>(warehouse,HttpStatus.OK);
+    public ResponseEntity<?> exportWarehouses() {
+        Warehouse warehouse = null;
+        try {
+            warehouse = WarehouseMapper.INSTANCE.entityToDto(warehouseService.exportWarehouses());
+        } catch (BLException e) {
+            log.error(e.getMessage());
+            Error error = new Error();
+            error.setErrorMessage(e.getMessage());
+            if (e instanceof BLDataNotFoundException) {
+                return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+            }
+
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+
+        }
+        return new ResponseEntity<>(warehouse, HttpStatus.OK);
     }
 
-    public ResponseEntity<Hop> getWarehouse(String code
+
+    public ResponseEntity<?> getWarehouse(String code
     ) {
-       Object hop= warehouseService.getWarehousebyCode(code);
-        /** TO DO: VALIDATION**/
-        if (hop.getClass()== WarehouseEntity.class) {
+        Error error = new Error();
+        Object hop = null;
+        try {
+            hop = warehouseService.getWarehousebyCode(code);
+        } catch (BLException e) {
+            error.setErrorMessage(e.getMessage());
+            if (e instanceof BLDataNotFoundException) {
+                return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+
+        if (hop.getClass() == WarehouseEntity.class) {
             Warehouse warehouse = WarehouseMapper.INSTANCE.entityToDto((WarehouseEntity) hop);
-            return new ResponseEntity<>(warehouse,HttpStatus.OK);
-        } else if (hop.getClass()== TruckEntity.class) {
+            return new ResponseEntity<>(warehouse, HttpStatus.OK);
+        } else if (hop.getClass() == TruckEntity.class) {
             Truck truck = TruckMapper.INSTANCE.entityToDto((TruckEntity) hop);
-            return new ResponseEntity<>(truck,HttpStatus.OK);
-        } else if (hop.getClass()==TransferwarehouseEntity.class) {
+            return new ResponseEntity<>(truck, HttpStatus.OK);
+        } else if (hop.getClass() == TransferwarehouseEntity.class) {
             Transferwarehouse transferwarehouse = TransferwarehouseMapper.INSTANCE.entityToDto((TransferwarehouseEntity) hop);
-            return new ResponseEntity<>(transferwarehouse,HttpStatus.OK);
+            return new ResponseEntity<>(transferwarehouse, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            error.setErrorMessage("The operation failed due to an error.");
+            return new ResponseEntity<>(error,HttpStatus.BAD_REQUEST);
         }
 
     }
 
 
-    public ResponseEntity<Void> importWarehouses(Warehouse warehouse) {
+    public ResponseEntity<?> importWarehouses(Warehouse warehouse) {
+        Error error = new Error();
         WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.dtoToEntity(warehouse);
-       if(warehouseService.importWarehouses(warehouseEntity)){return new ResponseEntity<>(HttpStatus.OK);}
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            warehouseService.importWarehouses(warehouseEntity);
+
+        } catch (BLException e) {
+            error.setErrorMessage(e.getMessage());
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 }

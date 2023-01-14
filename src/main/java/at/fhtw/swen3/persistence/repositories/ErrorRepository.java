@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface ErrorRepository extends JpaRepository<ErrorEntity, Long >{
 
     ErrorEntity findByErrorMessage(String errorMessage);
-   // ErrorEntity findById(long id);
 
 }
 

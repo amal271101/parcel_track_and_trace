@@ -25,7 +25,7 @@ public class RecipientEntity {
     private String street;
 
     @Column
-    @Pattern(regexp = "[A]-[0-9]{4}")
+    @Pattern(regexp = "[A]-[0-9]{4}", message = "Postal Code must conform to this Regex: [A]-[0-9]{4}")
     private String postalCode;
 
     @Column

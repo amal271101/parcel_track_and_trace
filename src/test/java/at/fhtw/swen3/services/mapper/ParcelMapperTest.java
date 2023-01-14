@@ -2,6 +2,7 @@ package at.fhtw.swen3.services.mapper;
 
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.services.dto.*;
+import at.fhtw.swen3.services.mapper.ParcelMapper;
 import org.junit.jupiter.api.Test;
 
 import java.time.OffsetDateTime;

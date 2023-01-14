@@ -4,10 +4,10 @@ import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 
 public interface WarehouseService {
 
-    public WarehouseEntity exportWarehouses();
+    public  WarehouseEntity exportWarehouses() throws BLException;
 
-    public Object getWarehousebyCode(String code);
+    public Object getWarehousebyCode(String code) throws BLException;
 
-    public boolean importWarehouses(WarehouseEntity warehouseEntity);
+    public void importWarehouses(WarehouseEntity warehouseEntity) throws BLException;
 
 }

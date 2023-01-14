@@ -39,12 +39,12 @@ public interface ParcelApi {
     }
 
     /**
-     * POST /parcel/{trackingId}/reportDelivery/ : Report that a Parcel has been delivered at it&#39;s final destination address. 
+     * POST /parcel/{trackingId}/reportDelivery/ : Report that a Parcel has been delivered at it&#39;s final destination address.
      *
      * @param trackingId The tracking ID of the parcel. E.g. PYJRB4HZ6  (required)
      * @return Successfully reported hop. (status code 200)
-     *         or The operation failed due to an error. (status code 400)
-     *         or Parcel does not exist with this tracking ID.  (status code 404)
+     * or The operation failed due to an error. (status code 400)
+     * or Parcel does not exist with this tracking ID.  (status code 404)
      */
     @Operation(
         operationId = "reportParcelDelivery",
@@ -63,7 +63,7 @@ public interface ParcelApi {
         value = "/parcel/{trackingId}/reportDelivery/",
         produces = { "application/json" }
     )
-    default ResponseEntity<Void> reportParcelDelivery(
+    default ResponseEntity<?> reportParcelDelivery(
         @Pattern(regexp = "^[A-Z0-9]{9}$") @Parameter(name = "trackingId", description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required = true) @PathVariable("trackingId") String trackingId
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
@@ -72,13 +72,13 @@ public interface ParcelApi {
 
 
     /**
-     * POST /parcel/{trackingId}/reportHop/{code} : Report that a Parcel has arrived at a certain hop either Warehouse or Truck. 
+     * POST /parcel/{trackingId}/reportHop/{code} : Report that a Parcel has arrived at a certain hop either Warehouse or Truck.
      *
      * @param trackingId The tracking ID of the parcel. E.g. PYJRB4HZ6  (required)
-     * @param code The Code of the hop (Warehouse or Truck). (required)
+     * @param code       The Code of the hop (Warehouse or Truck). (required)
      * @return Successfully reported hop. (status code 200)
-     *         or Parcel does not exist with this tracking ID or hop with code not found.  (status code 404)
-     *         or The operation failed due to an error. (status code 400)
+     * or Parcel does not exist with this tracking ID or hop with code not found.  (status code 404)
+     * or The operation failed due to an error. (status code 400)
      */
     @Operation(
         operationId = "reportParcelHop",
@@ -97,7 +97,7 @@ public interface ParcelApi {
         value = "/parcel/{trackingId}/reportHop/{code}",
         produces = { "application/json" }
     )
-    default ResponseEntity<Void> reportParcelHop(
+    default ResponseEntity<?> reportParcelHop(
         @Pattern(regexp = "^[A-Z0-9]{9}$") @Parameter(name = "trackingId", description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required = true) @PathVariable("trackingId") String trackingId,
         @Pattern(regexp = "^[A-Z]{4}\\d{1,4}$") @Parameter(name = "code", description = "The Code of the hop (Warehouse or Truck).", required = true) @PathVariable("code") String code
     ) {
@@ -107,12 +107,12 @@ public interface ParcelApi {
 
 
     /**
-     * POST /parcel : Submit a new parcel to the logistics service. 
+     * POST /parcel : Submit a new parcel to the logistics service.
      *
-     * @param parcel  (required)
+     * @param parcel (required)
      * @return Successfully submitted the new parcel (status code 201)
-     *         or The operation failed due to an error. (status code 400)
-     *         or The address of sender or receiver was not found. (status code 404)
+     * or The operation failed due to an error. (status code 400)
+     * or The address of sender or receiver was not found. (status code 404)
      */
     @Operation(
         operationId = "submitParcel",
@@ -136,7 +136,7 @@ public interface ParcelApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<NewParcelInfo> submitParcel(
+    default ResponseEntity<?> submitParcel(
         @Parameter(name = "Parcel", description = "", required = true) @Valid @RequestBody Parcel parcel
     ) {
         getRequest().ifPresent(request -> {
@@ -154,12 +154,12 @@ public interface ParcelApi {
 
 
     /**
-     * GET /parcel/{trackingId} : Find the latest state of a parcel by its tracking ID. 
+     * GET /parcel/{trackingId} : Find the latest state of a parcel by its tracking ID.
      *
      * @param trackingId The tracking ID of the parcel. E.g. PYJRB4HZ6  (required)
      * @return Parcel exists, here&#39;s the tracking information. (status code 200)
-     *         or The operation failed due to an error. (status code 400)
-     *         or Parcel does not exist with this tracking ID. (status code 404)
+     * or The operation failed due to an error. (status code 400)
+     * or Parcel does not exist with this tracking ID. (status code 404)
      */
     @Operation(
         operationId = "trackParcel",
@@ -180,7 +180,7 @@ public interface ParcelApi {
         value = "/parcel/{trackingId}",
         produces = { "application/json" }
     )
-    default ResponseEntity<TrackingInformation> trackParcel(
+    default ResponseEntity<?> trackParcel(
         @Pattern(regexp = "^[A-Z0-9]{9}$") @Parameter(name = "trackingId", description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required = true) @PathVariable("trackingId") String trackingId
     ) {
         getRequest().ifPresent(request -> {
@@ -201,10 +201,10 @@ public interface ParcelApi {
      * POST /parcel/{trackingId} : Transfer an existing parcel into the system dtosToEntity the service of a logistics partner.
      *
      * @param trackingId The tracking ID of the parcel. E.g. PYJRB4HZ6  (required)
-     * @param parcel  (required)
+     * @param parcel     (required)
      * @return Successfully transitioned the parcel (status code 200)
-     *         or The operation failed due to an error. (status code 400)
-     *         or A parcel with the specified trackingID is already in the system. (status code 409)
+     * or The operation failed due to an error. (status code 400)
+     * or A parcel with the specified trackingID is already in the system. (status code 409)
      */
     @Operation(
         operationId = "transitionParcel",
@@ -226,7 +226,7 @@ public interface ParcelApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<NewParcelInfo> transitionParcel(
+    default ResponseEntity<?> transitionParcel(
         @Pattern(regexp = "^[A-Z0-9]{9}$") @Parameter(name = "trackingId", description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required = true) @PathVariable("trackingId") String trackingId,
         @Parameter(name = "Parcel", description = "", required = true) @Valid @RequestBody Parcel parcel
     ) {

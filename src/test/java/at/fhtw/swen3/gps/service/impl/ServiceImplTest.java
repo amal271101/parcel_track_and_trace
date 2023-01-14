@@ -1,13 +1,14 @@
 package at.fhtw.swen3.gps.service.impl;
 
 import at.fhtw.swen3.persistence.entities.RecipientEntity;
+import at.fhtw.swen3.services.BLValidationException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ServiceImplTest {
     @Test
-    public void encodingTest() {
+    public void encodingTest() throws BLValidationException {
         GeoEncodingServiceImpl service = new GeoEncodingServiceImpl();
 
         RecipientEntity recipient = new RecipientEntity();

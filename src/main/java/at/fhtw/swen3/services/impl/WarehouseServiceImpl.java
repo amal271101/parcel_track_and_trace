@@ -2,10 +2,14 @@ package at.fhtw.swen3.services.impl;
 
 import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.persistence.repositories.*;
+import at.fhtw.swen3.services.BLDataNotFoundException;
+import at.fhtw.swen3.services.BLException;
+import at.fhtw.swen3.services.BLValidationException;
 import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.vaildation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 
 import java.util.List;
 
@@ -24,29 +28,60 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     private final TransferwarehouseRepository transferwarehouseRepository;
 
-    public void deleteWarehouses(){
-        warehouseRepository.deleteAllWarehouseEntityNextHops();
-        warehouseNextHopsRepository.deleteAllWarehouseNextHops();
-        warehouseRepository.deleteAllWarehouses();
-        truckRepository.deleteAll();
-        transferwarehouseRepository.deleteAll();
-    }
-
-    @Override
-    public WarehouseEntity exportWarehouses() {
-        return warehouseRepository.findByLevel(0);
-    }
-
-    @Override
-    public Object getWarehousebyCode(String code) {
-        if (truckRepository.findByCode(code) != null) {
-            return truckRepository.findByCode(code);
-        } else if (warehouseRepository.findByCode(code) != null) {
-            return warehouseRepository.findByCode(code);
-        } else if (transferwarehouseRepository.findByCode(code) != null) {
-            return transferwarehouseRepository.findByCode(code);
+    public void deleteWarehouses() throws BLException {
+        try {
+            warehouseRepository.deleteAllWarehouseEntityNextHops();
+            warehouseNextHopsRepository.deleteAllWarehouseNextHops();
+            warehouseRepository.deleteAllWarehouses();
+            truckRepository.deleteAll();
+            transferwarehouseRepository.deleteAll();
+        } catch (DataAccessException e) {
+            log.error("There was an error connecting to the Database" + e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
         }
-        return null;
+    }
+
+    @Override
+    public WarehouseEntity exportWarehouses() throws BLException {
+
+        WarehouseEntity warehouseEntity;
+
+        try {
+            warehouseEntity = warehouseRepository.findByLevel(0);
+
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
+        }
+
+        if (warehouseEntity == null) {
+            throw new BLDataNotFoundException(null, "No hierarchy loaded yet.");
+        }
+
+        return warehouseEntity;
+
+    }
+
+    @Override
+    public Object getWarehousebyCode(String code) throws BLException {
+        Object warehouse = null;
+
+        try {
+            if (truckRepository.findByCode(code) != null) {
+                warehouse = truckRepository.findByCode(code);
+            } else if (warehouseRepository.findByCode(code) != null) {
+                warehouse = warehouseRepository.findByCode(code);
+            } else if (transferwarehouseRepository.findByCode(code) != null) {
+                warehouse = transferwarehouseRepository.findByCode(code);
+            } else {
+                log.error("Could not find hop with the given Code");
+                throw new BLDataNotFoundException(null, "No hop with the specified id could be found.");
+            }
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
+        }
+        return warehouse;
     }
 
     public void saveNestedWarehouses(List<WarehouseNextHopsEntity> nextHops) {
@@ -70,26 +105,52 @@ public class WarehouseServiceImpl implements WarehouseService {
         }
     }
 
+
+    public void saveWarehouseHierarchy(WarehouseEntity warehouseEntity) throws BLException {
+
+        try {
+            saveNestedWarehouses(warehouseEntity.getNextHops());
+            geoCoordinateRepository.save(warehouseEntity.getLocationCoordinates());
+            warehouseRepository.save(warehouseEntity);
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
+        }
+
+    }
+
     @Override
-    public boolean importWarehouses(WarehouseEntity warehouseEntity) {
-        if (!myValidator.validate(warehouseEntity)) {
-            return false;
+    public void importWarehouses(WarehouseEntity warehouseEntity) throws BLException {
+        try {
+            myValidator.validate(warehouseEntity);
+        } catch (BLValidationException e) {
+            log.error(e.getMessage());
+            throw new BLValidationException(e, e.getMessage());
         }
 
-        if (warehouseRepository.count() != 0) {
-            System.out.println("CountBeforeDeleting: " + warehouseRepository.count());
-            deleteWarehouses();
-            System.out.println("CountAfterDeleting trucks: " + truckRepository.count());
-            System.out.println("CountAfterDeleting warehouses: " + warehouseRepository.count());
-            System.out.println("CountAfterDeleting transferwarehouses: " + transferwarehouseRepository.count());
+        try {
+            if (warehouseRepository.count() != 0) {
+                System.out.println("CountBeforeDeleting: " + warehouseRepository.count());
+                try {
+                    deleteWarehouses();
+                } catch (DataAccessException e) {
+                    log.error(e.getMessage());
+                    throw new BLException(e, "There was an error connecting to the Database");
+                }
+            }
 
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
         }
 
-        saveNestedWarehouses(warehouseEntity.getNextHops());
-        geoCoordinateRepository.save(warehouseEntity.getLocationCoordinates());
-        warehouseRepository.save(warehouseEntity);
-        System.out.println("CountAfterSaving: " + warehouseRepository.count());
+        try {
+            saveWarehouseHierarchy(warehouseEntity);
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            log.error(e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
+        }
 
-        return true;
     }
 }

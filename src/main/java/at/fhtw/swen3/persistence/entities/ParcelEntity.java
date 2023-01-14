@@ -14,12 +14,12 @@ import java.util.List;
 public class ParcelEntity {
 
     @Column
-    @DecimalMin("1.0")
+    @DecimalMin(value = "1.0",message ="weight must be between 1 and 10")
     @NotNull(message = "weight must be between 1 and 10")
     private Float weight;
 
     @Column
-    @Pattern(regexp = "^[A-Z0-9]{9}$")
+    @Pattern(regexp = "^[A-Z0-9]{9}$",message = "trackingId must conform to this patter: [A-Z0-9]{9}$")
     private String trackingId;
 
     @ManyToOne

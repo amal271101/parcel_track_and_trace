@@ -16,32 +16,32 @@ public class ParcelApiControllerTest {
 
     @Test
     void reportParcelDeliveryTestFail() {
-        ResponseEntity<Void> responseEntity = parcelController.reportParcelDelivery("null");
+        ResponseEntity<?> responseEntity = parcelController.reportParcelDelivery("null");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }
 
     @Test
     void reportParcelDeliveryTestSuccess() {
-        ResponseEntity<Void> responseEntity = parcelController.reportParcelDelivery("A3Z6F7B6N");
+        ResponseEntity<?> responseEntity = parcelController.reportParcelDelivery("A3Z6F7B6N");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.CREATED).getStatusCode());
     }
 
 
     @Test
     void reportParcelHopTestFail() {
-        ResponseEntity<Void> responseEntity = parcelController.reportParcelHop("A3Z6F7B6N", "ABVF9");
+        ResponseEntity<?> responseEntity = parcelController.reportParcelHop("A3Z6F7B6N", "ABVF9");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
     }
     @Test
     void trackParcelTestFail() {
-        ResponseEntity<TrackingInformation> responseEntity = parcelController.trackParcel("parcelDto");
+        ResponseEntity<?> responseEntity = parcelController.trackParcel("parcelDto");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
 
     }
 
     @Test
     void trackParcelTestSuccess() {
-        ResponseEntity<TrackingInformation> responseEntity = parcelController.trackParcel("A3Z6F7B6N");
+        ResponseEntity<?> responseEntity = parcelController.trackParcel("A3Z6F7B6N");
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.CREATED).getStatusCode());
 
     }
@@ -67,7 +67,7 @@ public class ParcelApiControllerTest {
         parcelDto.recipient(recipientDto);
         parcelDto.sender(senderDto);
         parcelDto.weight(weight);
-        ResponseEntity<NewParcelInfo> responseEntity = parcelController.transitionParcel("A3Z6F7B6N",parcelDto);
+        ResponseEntity<?> responseEntity = parcelController.transitionParcel("A3Z6F7B6N",parcelDto);
         assertEquals(responseEntity.getStatusCode(), new ResponseEntity<>(HttpStatus.BAD_REQUEST).getStatusCode());
 
     }

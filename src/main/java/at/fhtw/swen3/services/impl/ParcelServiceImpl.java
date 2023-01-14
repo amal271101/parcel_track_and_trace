@@ -3,6 +3,9 @@ package at.fhtw.swen3.services.impl;
 import at.fhtw.swen3.gps.service.impl.GeoEncodingServiceImpl;
 import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.persistence.repositories.*;
+import at.fhtw.swen3.services.BLDataNotFoundException;
+import at.fhtw.swen3.services.BLException;
+import at.fhtw.swen3.services.BLValidationException;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.vaildation.Validator;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -12,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
+import org.springframework.dao.DataAccessException;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -47,8 +51,13 @@ public class ParcelServiceImpl implements ParcelService {
         return generator.generate(9);
     }
 
-    private TruckEntity getNearestHop(RecipientEntity recipientEntity) {
-        GeoCoordinateEntity geoCoordinateEntity = geoEncodingServiceImpl.encodeAddress(recipientEntity);
+    private TruckEntity getNearestHop(RecipientEntity recipientEntity) throws BLValidationException {
+        GeoCoordinateEntity geoCoordinateEntity = null;
+        try {
+            geoCoordinateEntity = geoEncodingServiceImpl.encodeAddress(recipientEntity);
+        } catch (BLValidationException e) {
+            throw new BLValidationException(e, e.getMessage());
+        }
         GeometryFactory geometryFactory = new GeometryFactory();
         Point point = geometryFactory.createPoint(new Coordinate(geoCoordinateEntity.getLon(), geoCoordinateEntity.getLat()));
         System.out.println(point);
@@ -102,17 +111,39 @@ public class ParcelServiceImpl implements ParcelService {
 
 
     @Override
-    public NewParcelInfoEntity submitParcel(ParcelEntity parcelEntity) {
+    public NewParcelInfoEntity submitParcel(ParcelEntity parcelEntity) throws BLException {
         parcelEntity.setTrackingId(generateTrackingId());
-        NewParcelInfoEntity newParcelInfoEntity = saveParcelnReturnNewParcelInfo(parcelEntity);
+        NewParcelInfoEntity newParcelInfoEntity = null;
+        try {
+            newParcelInfoEntity = saveParcelnReturnNewParcelInfo(parcelEntity);
+        } catch (BLValidationException e) {
+            log.error(e.getMessage());
+            throw new BLException(e, e.getMessage());
+        }
         newParcelInfoEntity.setTrackingId(parcelEntity.getTrackingId());
         return newParcelInfoEntity;
     }
 
     @Override
-    public NewParcelInfoEntity transferParcel(String trackingId, ParcelEntity parcelEntity) {
+    public NewParcelInfoEntity transferParcel(String trackingId, ParcelEntity parcelEntity) throws BLException {
+
+        try {
+            if (parcelRepository.findByTrackingId(trackingId) != null) {
+                throw new BLException(null, "A parcel with the specified trackingID is already in the system.");
+            }
+        }catch (DataAccessException e){
+            log.error(e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
+        }
+
+
         parcelEntity.setTrackingId(trackingId);
-        NewParcelInfoEntity newParcelInfoEntity = saveParcelnReturnNewParcelInfo(parcelEntity);
+        NewParcelInfoEntity newParcelInfoEntity = null;
+        try {
+            newParcelInfoEntity = saveParcelnReturnNewParcelInfo(parcelEntity);
+        } catch (BLValidationException e) {
+            throw new BLException(e, e.getMessage());
+        }
         newParcelInfoEntity.setTrackingId(trackingId);
         return newParcelInfoEntity;
     }
@@ -123,18 +154,18 @@ public class ParcelServiceImpl implements ParcelService {
         } else if (warehouseRepository.findByCode(code) != null) {
             return TrackingInformationEntity.StateEnumEntity.INTRANSPORT;
         } else if (transferwarehouseRepository.findByCode(code) != null) {
-            callLogisticsPartnerApi(transferwarehouseRepository.findByCode(code).getLogisticsPartnerUrl(), parcelEntity.getTrackingId());
+            callLogisticsPartnerApi(transferwarehouseRepository.findByCode(code).getLogisticsPartnerUrl(), parcelEntity);
             return TrackingInformationEntity.StateEnumEntity.TRANSFERRED;
         }
         return null;
     }
 
-    private void callLogisticsPartnerApi(String partnerUrl, String trackingId) {
-        URI url = URI.create("https://" + partnerUrl + "/parcel/" + trackingId);
+    private void callLogisticsPartnerApi(String partnerUrl, ParcelEntity parcelEntity) {
+        URI url = URI.create("https://" + partnerUrl + "/parcel/" + parcelEntity.getTrackingId());
         HttpClient client = HttpClient.newBuilder().build();
         /**Call logistics partner API - TRANSFER – which has same contract as yours. p
          ---> POST Request ist leer **/
-        String requestBody = null;
+        String requestBody = parcelEntity.toString();
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .uri(url)
@@ -146,23 +177,26 @@ public class ParcelServiceImpl implements ParcelService {
                 .thenApply(HttpResponse::body)
                 .thenAccept((response) -> {
 
-                    System.out.println(response);
+                    System.out.println("response" + response);
                     System.out.println("logisticsPartnerApiCalled");
                 })
                 .join();
     }
 
     @Override
-    public boolean reportParcelHop(String trackingId, String code) {
-        ParcelEntity parcelEntity = parcelRepository.findByTrackingId(trackingId);
-        if (parcelEntity == null) {
-            return false;
-        }
-        List<HopArrivalEntity> futureHops = parcelEntity.getFutureHops();
-        List<HopArrivalEntity> visitedHops = parcelEntity.getVisitedHops();
-
+    public void reportParcelHop(String trackingId, String code) throws BLException {
+        ParcelEntity parcelEntity = null;
         HopArrivalEntity hopArrivalEntity = null;
+        try {
+            parcelEntity = parcelRepository.findByTrackingId(trackingId);
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
+        }
 
+        if (parcelEntity == null) {
+            throw new BLDataNotFoundException(null, "Parcel does not exist with this tracking ID or hop with code not found");
+        }
         for (HopArrivalEntity hop : parcelEntity.getFutureHops()) {
             if (hop.getCode().equals(code)) {
                 hopArrivalEntity = hop;
@@ -170,21 +204,36 @@ public class ParcelServiceImpl implements ParcelService {
         }
 
         if (hopArrivalEntity == null) {
-            return false;
+            throw new BLDataNotFoundException(null, "Parcel does not exist with this tracking ID or hop with code not found");
         }
 
 
+        List<HopArrivalEntity> futureHops = parcelEntity.getFutureHops();
+        List<HopArrivalEntity> visitedHops = parcelEntity.getVisitedHops();
+
         futureHops.remove(hopArrivalEntity);
         visitedHops.add(hopArrivalEntity);
+
+
         parcelEntity.setFutureHops(futureHops);
         parcelEntity.setVisitedHops(visitedHops);
-        parcelEntity.setState(getTrackingState(parcelEntity, code));
-        parcelRepository.save(parcelEntity);
+        try {
+            parcelEntity.setState(getTrackingState(parcelEntity, code));
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
+        }
 
-        return true;
+        try {
+            parcelRepository.save(parcelEntity);
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
+        }
+
     }
 
-    private NewParcelInfoEntity saveParcelnReturnNewParcelInfo(ParcelEntity parcelEntity) {
+    private NewParcelInfoEntity saveParcelnReturnNewParcelInfo(ParcelEntity parcelEntity) throws BLValidationException {
         HopArrivalEntity hop = new HopArrivalEntity();
         hop.setDateTime(OffsetDateTime.now());
         hop.setCode("ABAB790");
@@ -198,6 +247,7 @@ public class ParcelServiceImpl implements ParcelService {
 
         TruckEntity truckEntityA = getNearestHop(parcelEntity.getRecipient());
         TruckEntity truckEntityB = getNearestHop(parcelEntity.getSender());
+
         WarehouseEntity warehouseEntity = warehouseRepository.findByLevel(0);
 
         List<HopEntity> route = calculateRoute(truckEntityA, truckEntityB, warehouseEntity);
@@ -214,38 +264,59 @@ public class ParcelServiceImpl implements ParcelService {
         }
         parcelEntity.setFutureHops(futureHops);
 
+        try {
+            myValidator.validate(parcelEntity);
+            myValidator.validate(parcelEntity.getRecipient());
+            myValidator.validate(parcelEntity.getSender());
+        } catch (BLValidationException e) {
+            log.error(e.getMessage());
+            throw new BLValidationException(e, e.getMessage());
+        }
+        recipientRepository.save(parcelEntity.getRecipient());
+        recipientRepository.save(parcelEntity.getSender());
+        parcelRepository.save(parcelEntity);
 
-        if(myValidator.validate(parcelEntity)){
-            recipientRepository.save(parcelEntity.getRecipient());
-            recipientRepository.save(parcelEntity.getSender());
-            parcelRepository.save(parcelEntity);
-        }else { return null;}
         return new NewParcelInfoEntity();
     }
 
     @Override
-    public void reportParcelDelivery(String trackingId) {
-        NewParcelInfoEntity newParcelInfoEntity = new NewParcelInfoEntity();
-        newParcelInfoEntity.setTrackingId(trackingId);
-        if (myValidator.validate(newParcelInfoEntity)) {
+    public void reportParcelDelivery(String trackingId) throws BLException {
+        getParcelTrackingInformation(trackingId);
+
+        try {
             parcelRepository.setStateToDelivered(trackingId);
+
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
         }
+
     }
 
 
     @Override
-    public TrackingInformationEntity getParcelTrackingInformation(String trackingId) {
+    public TrackingInformationEntity getParcelTrackingInformation(String trackingId) throws BLException {
         NewParcelInfoEntity newParcelInfoEntity = new NewParcelInfoEntity();
         newParcelInfoEntity.setTrackingId(trackingId);
         ParcelEntity parcelEntity;
         TrackingInformationEntity trackingInformationEntity = new TrackingInformationEntity();
 
-        if (myValidator.validate(newParcelInfoEntity)) {
+        try {
             parcelEntity = parcelRepository.findByTrackingId(trackingId);
-            trackingInformationEntity.setState(parcelEntity.getState());
-            trackingInformationEntity.setFutureHops(parcelEntity.getFutureHops());
-            trackingInformationEntity.setVisitedHops(parcelEntity.getVisitedHops());
+
+        } catch (DataAccessException e) {
+            log.error(e.getMessage());
+            throw new BLException(e, "There was an error connecting to the Database");
         }
+
+        if (parcelEntity == null) {
+            throw new BLDataNotFoundException(null, "Parcel does not exist with this tracking ID.");
+        }
+
+        trackingInformationEntity.setState(parcelEntity.getState());
+        trackingInformationEntity.setFutureHops(parcelEntity.getFutureHops());
+        trackingInformationEntity.setVisitedHops(parcelEntity.getVisitedHops());
+
         return trackingInformationEntity;
     }
 }

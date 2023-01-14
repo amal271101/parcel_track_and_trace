@@ -37,11 +37,11 @@ public interface WarehouseApi {
     }
 
     /**
-     * GET /warehouse : Exports the hierarchy of Warehouse and Truck objects. 
+     * GET /warehouse : Exports the hierarchy of Warehouse and Truck objects.
      *
      * @return Successful response (status code 200)
-     *         or The operation failed due to an error. (status code 400)
-     *         or No hierarchy loaded yet. (status code 404)
+     * or The operation failed due to an error. (status code 400)
+     * or No hierarchy loaded yet. (status code 404)
      */
     @Operation(
         operationId = "exportWarehouses",
@@ -62,7 +62,7 @@ public interface WarehouseApi {
         value = "/warehouse",
         produces = { "application/json" }
     )
-    default ResponseEntity<Warehouse> exportWarehouses(
+    default ResponseEntity<?> exportWarehouses(
         
     ) {
         getRequest().ifPresent(request -> {
@@ -82,10 +82,10 @@ public interface WarehouseApi {
     /**
      * GET /warehouse/{code} : Get a certain warehouse or truck by code
      *
-     * @param code  (required)
+     * @param code (required)
      * @return Successful response (status code 200)
-     *         or The operation failed due to an error. (status code 400)
-     *         or No hop with the specified id could be found. (status code 404)
+     * or The operation failed due to an error. (status code 400)
+     * or No hop with the specified id could be found. (status code 404)
      */
     @Operation(
         operationId = "getWarehouse",
@@ -106,7 +106,7 @@ public interface WarehouseApi {
         value = "/warehouse/{code}",
         produces = { "application/json" }
     )
-    default ResponseEntity<Hop> getWarehouse(
+    default ResponseEntity<?> getWarehouse(
         @Parameter(name = "code", description = "", required = true) @PathVariable("code") String code
     ) {
         getRequest().ifPresent(request -> {
@@ -124,11 +124,11 @@ public interface WarehouseApi {
 
 
     /**
-     * POST /warehouse : Imports a hierarchy of Warehouse and Truck objects. 
+     * POST /warehouse : Imports a hierarchy of Warehouse and Truck objects.
      *
-     * @param warehouse  (required)
+     * @param warehouse (required)
      * @return Successfully loaded. (status code 200)
-     *         or The operation failed due to an error. (status code 400)
+     * or The operation failed due to an error. (status code 400)
      */
     @Operation(
         operationId = "importWarehouses",
@@ -147,7 +147,7 @@ public interface WarehouseApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<Void> importWarehouses(
+    default ResponseEntity<?> importWarehouses(
         @Parameter(name = "Warehouse", description = "", required = true) @Valid @RequestBody Warehouse warehouse
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
