@@ -58,6 +58,8 @@ public class WarehouseServiceImpl implements WarehouseService {
             throw new BLDataNotFoundException(null, "No hierarchy loaded yet.");
         }
 
+        log.info("found hierarchy" );
+
         return warehouseEntity;
 
     }
@@ -69,10 +71,15 @@ public class WarehouseServiceImpl implements WarehouseService {
         try {
             if (truckRepository.findByCode(code) != null) {
                 warehouse = truckRepository.findByCode(code);
+                log.info("Code belongs to truck" );
+
             } else if (warehouseRepository.findByCode(code) != null) {
                 warehouse = warehouseRepository.findByCode(code);
+                log.info("Code belongs to warehouse" );
             } else if (transferwarehouseRepository.findByCode(code) != null) {
                 warehouse = transferwarehouseRepository.findByCode(code);
+                log.info("Code belongs to transfer warehouse" );
+
             } else {
                 log.error("Could not find hop with the given Code");
                 throw new BLDataNotFoundException(null, "No hop with the specified id could be found.");
@@ -112,15 +119,19 @@ public class WarehouseServiceImpl implements WarehouseService {
             saveNestedWarehouses(warehouseEntity.getNextHops());
             geoCoordinateRepository.save(warehouseEntity.getLocationCoordinates());
             warehouseRepository.save(warehouseEntity);
+
         } catch (DataAccessException e) {
             log.error(e.getMessage());
             throw new BLException(e, "There was an error connecting to the Database");
         }
+        log.info("Succesfully saved hierarchy ");
 
     }
 
     @Override
     public void importWarehouses(WarehouseEntity warehouseEntity) throws BLException {
+        log.info("importing Warehouses ");
+
         try {
             myValidator.validate(warehouseEntity);
         } catch (BLValidationException e) {
@@ -130,9 +141,11 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         try {
             if (warehouseRepository.count() != 0) {
-                System.out.println("CountBeforeDeleting: " + warehouseRepository.count());
+                log.info("Count Before Deleting: " + warehouseRepository.count());
                 try {
                     deleteWarehouses();
+                    log.info("Count After Deleting: " + warehouseRepository.count());
+
                 } catch (DataAccessException e) {
                     log.error(e.getMessage());
                     throw new BLException(e, "There was an error connecting to the Database");
@@ -146,6 +159,8 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         try {
             saveWarehouseHierarchy(warehouseEntity);
+            log.info("Count After saving new  hierarchy: " + warehouseRepository.count());
+
         } catch (DataAccessException e) {
             log.error(e.getMessage());
             log.error(e.getMessage());

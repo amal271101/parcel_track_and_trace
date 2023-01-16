@@ -65,6 +65,8 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     public List<HopEntity> calculateRoute(HopEntity hopA, HopEntity hopB, HopEntity warehouse) {
+        log.info("in calculate route" );
+
         WarehouseEntity parentHopA = findParent((WarehouseEntity) warehouse, hopA);
         WarehouseEntity parentHopB = findParent((WarehouseEntity) warehouse, hopB);
 
@@ -96,6 +98,7 @@ public class ParcelServiceImpl implements ParcelService {
     public WarehouseEntity findParent(WarehouseEntity warehouse, HopEntity truck) {
         for (WarehouseNextHopsEntity nextHop : warehouse.getNextHops()) {
             if (nextHop.getHop().equals(truck)) {
+                log.info("Code of Parent: "+warehouse.getCode());
                 return warehouse;
             }
             if (nextHop.getHop() instanceof WarehouseEntity) {
@@ -112,6 +115,8 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public NewParcelInfoEntity submitParcel(ParcelEntity parcelEntity) throws BLException {
+        log.info("in submitParcel");
+
         parcelEntity.setTrackingId(generateTrackingId());
         NewParcelInfoEntity newParcelInfoEntity = null;
         try {
@@ -163,9 +168,7 @@ public class ParcelServiceImpl implements ParcelService {
     private void callLogisticsPartnerApi(String partnerUrl, ParcelEntity parcelEntity) {
         URI url = URI.create("https://" + partnerUrl + "/parcel/" + parcelEntity.getTrackingId());
         HttpClient client = HttpClient.newBuilder().build();
-        /**Call logistics partner API - TRANSFER – which has same contract as yours. p
-         ---> POST Request ist leer **/
-        String requestBody = parcelEntity.toString();
+            String requestBody = parcelEntity.toString();
         HttpRequest request = HttpRequest.newBuilder()
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .uri(url)
@@ -176,15 +179,18 @@ public class ParcelServiceImpl implements ParcelService {
         future
                 .thenApply(HttpResponse::body)
                 .thenAccept((response) -> {
+                    log.info("response" + response);
+                    log.info("logisticsPartnerApiCalled");
 
-                    System.out.println("response" + response);
-                    System.out.println("logisticsPartnerApiCalled");
                 })
                 .join();
     }
 
     @Override
     public void reportParcelHop(String trackingId, String code) throws BLException {
+
+        log.info("in report ParcelHop");
+
         ParcelEntity parcelEntity = null;
         HopArrivalEntity hopArrivalEntity = null;
         try {
@@ -234,15 +240,9 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     private NewParcelInfoEntity saveParcelnReturnNewParcelInfo(ParcelEntity parcelEntity, Boolean transfer) throws BLValidationException {
-        HopArrivalEntity hop = new HopArrivalEntity();
-        hop.setDateTime(OffsetDateTime.now());
-        hop.setCode("ABAB790");
-        List<HopArrivalEntity> visitedHops = new ArrayList<>();
+
         List<HopArrivalEntity> futureHops = new ArrayList<>();
 
-        visitedHops.add(hop);
-        log.info(String.valueOf(visitedHops.get(0).getDateTime()));
-        parcelEntity.setVisitedHops(visitedHops);
 
         if(transfer){
             parcelEntity.setState(TrackingInformationEntity.StateEnumEntity.TRANSFERRED);
