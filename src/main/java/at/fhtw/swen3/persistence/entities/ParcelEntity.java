@@ -43,7 +43,6 @@ public class ParcelEntity {
 
     @Column
     @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
-    @NotNull(message = "visitedHops cannot be null")
     private List<HopArrivalEntity> visitedHops;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

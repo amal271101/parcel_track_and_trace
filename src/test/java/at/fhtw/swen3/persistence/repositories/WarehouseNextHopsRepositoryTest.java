@@ -22,6 +22,9 @@ public class WarehouseNextHopsRepositoryTest {
     TruckRepository truckRepository;
 
     @Autowired
+    GeoCoordinateRespository geoCoordinateRespository;
+
+    @Autowired
     WarehouseRepository warehouseRepository;
 
     @Test
@@ -45,28 +48,16 @@ public class WarehouseNextHopsRepositoryTest {
         warehouseNextHopsEntity.setHop(hopEntity);
         warehouseNextHopsEntity.setTraveltimeMins(60);
 
-        hopRepository.save(hopEntity);
         warehouseNextHopsRepository.save(warehouseNextHopsEntity);
 
         assertEquals(warehouseNextHopsRepository.findByTraveltimeMins(warehouseNextHopsEntity.getTraveltimeMins()).getTraveltimeMins(),warehouseNextHopsEntity.getTraveltimeMins());
 
         warehouseNextHopsRepository.delete(warehouseNextHopsEntity);
-        hopRepository.delete(hopEntity);
 
+        geoCoordinateRespository.delete(geoCoordinateEntity);
         assertNull(warehouseNextHopsRepository.findByTraveltimeMins(warehouseNextHopsEntity.getTraveltimeMins()));
 
     }
-
-   /* @Test
-    void getWarehouseNextHopsByHopId(){
-
-
-        //Trucks WTTA013 WTTA014
-       WarehouseNextHopsEntity warehouseNextHopsEntity= warehouseNextHopsRepository.findByHop_Id(2710L);
-
-        System.out.println(warehouseRepository.getid(warehouseNextHopsEntity.getId()));
-       assertEquals(warehouseNextHopsEntity.getHop().getCode(),truckRepository.findById(2710L).getCode());
-    }*/
 
 }
 

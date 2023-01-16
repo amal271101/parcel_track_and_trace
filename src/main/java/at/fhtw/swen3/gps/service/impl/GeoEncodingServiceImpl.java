@@ -23,6 +23,7 @@ public class GeoEncodingServiceImpl implements GeoEncodingService {
     public GeoCoordinateEntity encodeAddress(RecipientEntity adress) throws BLValidationException {
         try {
             URI url = URI.create(("https://nominatim.openstreetmap.org/search?addressdetails=1&q="+ formatStreet(adress.getStreet())+" "+adress.getCountry()+" "+" "+adress.getCity()+" "+formatPostalCode(adress.getPostalCode())+"&format=json").replaceAll(" ", "%20"));
+            log.info(url.toString());
             HttpClient client = HttpClient.newBuilder().build();
             HttpRequest request = HttpRequest.newBuilder(url).GET().build();
             CompletableFuture<HttpResponse<String>> future = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
@@ -37,12 +38,14 @@ public class GeoEncodingServiceImpl implements GeoEncodingService {
                         String lon = obj.getString("lon");
                         this.geoCoordinateEntity.setLon(Double.valueOf(lon));
                         this.geoCoordinateEntity.setLat(Double.valueOf(lat));
+                        log.info("lon: "+geoCoordinateEntity.getLon());
+                        log.info("lat: "+geoCoordinateEntity.getLat());
 
                     })
                     .join();
             return geoCoordinateEntity;
         }catch (Exception e){
-            log.error("The address of sender or receiver was not found.");
+            log.error("The address of sender or receiver was not found." + adress.getName());
             throw new BLValidationException( e,"The address of sender or receiver was not found." );
         }
 

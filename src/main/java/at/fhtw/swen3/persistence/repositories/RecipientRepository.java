@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecipientRepository extends JpaRepository<RecipientEntity, Long> {
     RecipientEntity findByCity(String city);
+
+    RecipientEntity findByName(String name);
 }

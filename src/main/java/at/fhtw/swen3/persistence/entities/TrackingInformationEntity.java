@@ -56,7 +56,7 @@ public class TrackingInformationEntity {
 
     @Column
     @OneToMany
-    @NotNull(message = "visitedHops cannot be null")
+    @NotNull()
     private List<HopArrivalEntity> visitedHops;
 
 }

@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-01-14T16:21:00+0100",
+    date = "2023-01-16T00:41:36+0100",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 17.0.5 (Amazon.com Inc.)"
 )
 public class WarehouseMapperImpl implements WarehouseMapper {

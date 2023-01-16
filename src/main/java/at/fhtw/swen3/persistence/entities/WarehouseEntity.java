@@ -27,5 +27,4 @@ public class WarehouseEntity extends HopEntity{
     private List<WarehouseNextHopsEntity> nextHops;
 
 
-
 }

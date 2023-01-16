@@ -50,6 +50,7 @@ public class ParcelRepositoryTest {
 
         HopArrivalEntity hop = new HopArrivalEntity();
         hop.setDateTime(OffsetDateTime.now());
+        hop.setCode("GEPU914");
         List<HopArrivalEntity> visitedHops = new ArrayList<>();
         visitedHops.add(hop);
         parcelEntity.setFutureHops(visitedHops);

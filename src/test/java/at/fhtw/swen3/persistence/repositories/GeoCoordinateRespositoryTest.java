@@ -17,11 +17,10 @@ public class GeoCoordinateRespositoryTest {
 
             GeoCoordinateEntity geoCoordinateEntity= new GeoCoordinateEntity();
             geoCoordinateEntity.setId(1L);
-            geoCoordinateEntity.setLon(45.56);
-            geoCoordinateEntity.setLat(53.53);
+            geoCoordinateEntity.setLon(53.56);
+            geoCoordinateEntity.setLat(35.53);
 
             geoCoordinateRespository.save(geoCoordinateEntity);
-
 
             assertEquals(geoCoordinateRespository.findByLat(geoCoordinateEntity.getLat()).getLat(),geoCoordinateEntity.getLat());
             geoCoordinateRespository.delete(geoCoordinateRespository.findByLat(geoCoordinateEntity.getLat()));

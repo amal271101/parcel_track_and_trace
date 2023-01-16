@@ -1,4 +1,4 @@
-package other;
+package at.fhtw.swen3;
 
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;

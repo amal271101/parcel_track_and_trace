@@ -16,19 +16,19 @@ public class RecipientRepositoryTest {
     void saveAndDeleteRecipientEntity() {
 
         RecipientEntity recipientEntity = new RecipientEntity();
-        recipientEntity.setStreet("Landstraße 27a");
+        recipientEntity.setStreet("Landstraße 28a");
         recipientEntity.setCity("Vienna");
         recipientEntity.setPostalCode("A-1210");
-        recipientEntity.setName("Amal");
+        recipientEntity.setName("Aloha Ahola");
         recipientEntity.setCountry("Austria");
 
         recipientRepository.save(recipientEntity);
 
-        assertEquals(recipientRepository.findByCity(recipientEntity.getCity()).getCity(), recipientEntity.getCity());
+        assertEquals(recipientRepository.findByName(recipientEntity.getName()).getName(), recipientEntity.getName());
 
-        recipientRepository.delete(recipientEntity);
+        recipientRepository.delete(recipientRepository.findByName(recipientEntity.getName()));
 
-        assertNull(recipientRepository.findByCity(recipientEntity.getCity()));
+        assertNull(recipientRepository.findByCity(recipientEntity.getName()));
 
     }
 }

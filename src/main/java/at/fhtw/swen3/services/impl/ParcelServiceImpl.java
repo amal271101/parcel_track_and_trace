@@ -115,7 +115,7 @@ public class ParcelServiceImpl implements ParcelService {
         parcelEntity.setTrackingId(generateTrackingId());
         NewParcelInfoEntity newParcelInfoEntity = null;
         try {
-            newParcelInfoEntity = saveParcelnReturnNewParcelInfo(parcelEntity);
+            newParcelInfoEntity = saveParcelnReturnNewParcelInfo(parcelEntity, false);
         } catch (BLValidationException e) {
             log.error(e.getMessage());
             throw new BLException(e, e.getMessage());
@@ -140,7 +140,7 @@ public class ParcelServiceImpl implements ParcelService {
         parcelEntity.setTrackingId(trackingId);
         NewParcelInfoEntity newParcelInfoEntity = null;
         try {
-            newParcelInfoEntity = saveParcelnReturnNewParcelInfo(parcelEntity);
+            newParcelInfoEntity = saveParcelnReturnNewParcelInfo(parcelEntity, true);
         } catch (BLValidationException e) {
             throw new BLException(e, e.getMessage());
         }
@@ -150,7 +150,7 @@ public class ParcelServiceImpl implements ParcelService {
 
     public TrackingInformationEntity.StateEnumEntity getTrackingState(ParcelEntity parcelEntity, String code) {
         if (truckRepository.findByCode(code) != null) {
-            return TrackingInformationEntity.StateEnumEntity.INTRANSPORT;
+            return TrackingInformationEntity.StateEnumEntity.INTRUCKDELIVERY;
         } else if (warehouseRepository.findByCode(code) != null) {
             return TrackingInformationEntity.StateEnumEntity.INTRANSPORT;
         } else if (transferwarehouseRepository.findByCode(code) != null) {
@@ -233,7 +233,7 @@ public class ParcelServiceImpl implements ParcelService {
 
     }
 
-    private NewParcelInfoEntity saveParcelnReturnNewParcelInfo(ParcelEntity parcelEntity) throws BLValidationException {
+    private NewParcelInfoEntity saveParcelnReturnNewParcelInfo(ParcelEntity parcelEntity, Boolean transfer) throws BLValidationException {
         HopArrivalEntity hop = new HopArrivalEntity();
         hop.setDateTime(OffsetDateTime.now());
         hop.setCode("ABAB790");
@@ -243,8 +243,13 @@ public class ParcelServiceImpl implements ParcelService {
         visitedHops.add(hop);
         log.info(String.valueOf(visitedHops.get(0).getDateTime()));
         parcelEntity.setVisitedHops(visitedHops);
-        parcelEntity.setState(TrackingInformationEntity.StateEnumEntity.PICKUP);
 
+        if(transfer){
+            parcelEntity.setState(TrackingInformationEntity.StateEnumEntity.TRANSFERRED);
+        }else{
+            parcelEntity.setState(TrackingInformationEntity.StateEnumEntity.PICKUP);
+
+        }
         TruckEntity truckEntityA = getNearestHop(parcelEntity.getRecipient());
         TruckEntity truckEntityB = getNearestHop(parcelEntity.getSender());
 
@@ -282,7 +287,6 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public void reportParcelDelivery(String trackingId) throws BLException {
         getParcelTrackingInformation(trackingId);
-
         try {
             parcelRepository.setStateToDelivered(trackingId);
 
@@ -310,6 +314,7 @@ public class ParcelServiceImpl implements ParcelService {
         }
 
         if (parcelEntity == null) {
+            log.error( "Parcel does not exist with this tracking ID.");
             throw new BLDataNotFoundException(null, "Parcel does not exist with this tracking ID.");
         }
 

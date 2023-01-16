@@ -16,11 +16,11 @@ public class HopRepositoryTest {
 
 
     @Test
-    void saveAndDeleteHopArrivalEntity() {
+    void saveAndDeleteHopEntity() {
 
         HopEntity hopEntity= new HopEntity();
-        hopEntity.setDescription("This is a description");
-        hopEntity.setCode("BLAA5");
+        hopEntity.setDescription("This is also a  description");
+        hopEntity.setCode("BLBA5");
         hopEntity.setHopType("hopytype");
         hopEntity.setLocationName("Floridsdorf");
         hopEntity.setProcessingDelayMins(23);
